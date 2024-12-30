@@ -12,3 +12,119 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum Status {
+  SCHEDULED
+  IN_PROGRESS
+  DONE
+  CANCELLED
+}
+
+enum BloodType {
+  A_POSITIVE
+  A_NEGATIVE
+  B_POSITIVE
+  B_NEGATIVE
+  AB_POSITIVE
+  AB_NEGATIVE
+  O_POSITIVE
+  O_NEGATIVE
+}
+
+model Doctor {
+  id            Int             @id @default(autoincrement())
+  dni           String          @unique
+  names         String
+  lastNames     String
+  speciality    String
+  licenseNumber String
+  dea           String
+  education     Education[]     @relation("DoctorStudies")
+  DoctorStudies DoctorStudies[]
+}
+
+model Administrator {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  name     String
+  lastName String
+  password String
+  role     String
+}
+
+model Nurse {
+  id            Int    @id @default(autoincrement())
+  email         String @unique
+  name          String
+  lastName      String
+  password      String
+  speciality    String
+  licenseNumber String
+  dea           String
+  role          String
+}
+
+model Education {
+  id              Int             @id @default(autoincrement())
+  institutionName String          @unique
+  doctor          Doctor          @relation("DoctorStudies", fields: [doctorId], references: [id])
+  doctorId        Int
+  DoctorStudies   DoctorStudies[]
+}
+
+model Patient {
+  id               Int                @id @default(autoincrement())
+  dni              String             @unique
+  email            String             @unique
+  name             String
+  lastName         String
+  weight           Decimal
+  height           Decimal
+  gender           Gender
+  bloodType        BloodType
+  Surgery          Surgery[]
+  EmergencyContact EmergencyContact[]
+}
+
+model Surgery {
+  id        Int      @id @default(autoincrement())
+  patientId Int
+  title     String
+  date      DateTime
+  status    Status
+  patient   Patient  @relation(fields: [patientId], references: [id])
+}
+
+model EmergencyContact {
+  id          Int     @id @default(autoincrement())
+  patientId   Int
+  name        String
+  lastName    String
+  email       String  @unique
+  phoneNumber String
+  dni         String  @unique
+  patient     Patient @relation(fields: [patientId], references: [id])
+}
+
+model Procedure {
+  id          Int      @id @default(autoincrement())
+  surgeryId   String
+  name        String
+  description String
+  duration    DateTime
+}
+
+model DoctorStudies {
+  doctorId    Int
+  educationId Int
+
+  doctor    Doctor    @relation(fields: [doctorId], references: [id])
+  education Education @relation(fields: [educationId], references: [id])
+
+  @@id([doctorId, educationId])
+}
