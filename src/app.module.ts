@@ -5,7 +5,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
 import { NurseModule } from './nurse/nurse.module';
-import { ConfigModule } from './config/config.module';
+import { ConfigModule } from './common/config/config.module';
 
 @Module({
   imports: [PrismaModule, AuthModule, AdminModule, NurseModule, ConfigModule],
