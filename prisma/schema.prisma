@@ -54,7 +54,6 @@ model Administrator {
   name     String
   lastName String
   password String
-  role     String
 }
 
 model Nurse {
@@ -66,7 +65,6 @@ model Nurse {
   speciality    String
   licenseNumber String
   dea           String
-  role          String
 }
 
 model Education {
