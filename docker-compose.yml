@@ -1,13 +1,15 @@
 services:
   db:
-    image: postgres:17
+    build:
+      context: ./prisma
+      dockerfile: Dockerfile
     restart: always
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
-    volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+    # volumes:
+    # - ./postgres-data:/var/lib/postgresql/data
     ports:
       - '5434:5432'
     networks:

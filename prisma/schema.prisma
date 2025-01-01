@@ -46,6 +46,7 @@ model Doctor {
   dea           String
   education     Education[]     @relation("DoctorStudies")
   DoctorStudies DoctorStudies[]
+  DoctorSurgery DoctorSurgery[]
 }
 
 model Administrator {
@@ -57,22 +58,25 @@ model Administrator {
 }
 
 model Nurse {
-  id            Int    @id @default(autoincrement())
-  email         String @unique
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
   name          String
   lastName      String
   password      String
   speciality    String
   licenseNumber String
   dea           String
+  NurseStudies  NurseStudies[]
+  NurseSurgery  NurseSurgery[]
 }
 
 model Education {
   id              Int             @id @default(autoincrement())
+  doctorId        Int
   institutionName String          @unique
   doctor          Doctor          @relation("DoctorStudies", fields: [doctorId], references: [id])
-  doctorId        Int
   DoctorStudies   DoctorStudies[]
+  NurseStudies    NurseStudies[]
 }
 
 model Patient {
@@ -90,12 +94,15 @@ model Patient {
 }
 
 model Surgery {
-  id        Int      @id @default(autoincrement())
-  patientId Int
-  title     String
-  date      DateTime
-  status    Status
-  patient   Patient  @relation(fields: [patientId], references: [id])
+  id            Int             @id @default(autoincrement())
+  patientId     Int
+  title         String
+  date          DateTime
+  status        Status
+  patient       Patient         @relation(fields: [patientId], references: [id])
+  Procedure     Procedure[]
+  DoctorSurgery DoctorSurgery[]
+  NurseSurgery  NurseSurgery[]
 }
 
 model EmergencyContact {
@@ -110,11 +117,14 @@ model EmergencyContact {
 }
 
 model Procedure {
-  id          Int      @id @default(autoincrement())
-  surgeryId   String
+  id          Int      @default(autoincrement())
+  surgeryId   Int
   name        String
   description String
   duration    DateTime
+  surgery     Surgery  @relation(fields: [surgeryId], references: [id])
+
+  @@id([id, surgeryId])
 }
 
 model DoctorStudies {
@@ -125,4 +135,34 @@ model DoctorStudies {
   education Education @relation(fields: [educationId], references: [id])
 
   @@id([doctorId, educationId])
+}
+
+model NurseStudies {
+  nurseId     Int
+  educationId Int
+
+  nurse     Nurse     @relation(fields: [nurseId], references: [id])
+  education Education @relation(fields: [educationId], references: [id])
+
+  @@id([nurseId, educationId])
+}
+
+model DoctorSurgery {
+  doctorId  Int
+  surgeryId Int
+
+  doctor  Doctor  @relation(fields: [doctorId], references: [id])
+  surgery Surgery @relation(fields: [surgeryId], references: [id])
+
+  @@id([surgeryId, doctorId])
+}
+
+model NurseSurgery {
+  nurseId   Int
+  surgeryId Int
+
+  nurse   Nurse   @relation(fields: [nurseId], references: [id])
+  surgery Surgery @relation(fields: [surgeryId], references: [id])
+
+  @@id([surgeryId, nurseId])
 }

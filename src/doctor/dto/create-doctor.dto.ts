@@ -1,13 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateNurseDto {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  @IsEmail()
-  email: string;
-
+export class CreateDoctorDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
@@ -21,17 +15,17 @@ export class CreateNurseDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  password: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
   speciality: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  licenseNumber: string;
+  licneseNumber: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  dni: string;
 
   @ApiProperty()
   @IsNotEmpty()

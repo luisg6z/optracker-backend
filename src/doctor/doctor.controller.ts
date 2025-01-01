@@ -12,23 +12,21 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import {
-  AlreadyExistsError,
-  NotFoundError,
-} from 'src/common/errors/service.errors';
-import { CreateNurseDto } from './dto/create-nurse.dto';
-import { UpdateNurseDto } from './dto/update-nurse.dto';
-import { NurseService } from './nurse.service';
+import { NotFoundError } from 'rxjs';
+import { AlreadyExistsError } from 'src/common/errors/service.errors';
+import { DoctorService } from './doctor.service';
+import { CreateDoctorDto } from './dto/create-doctor.dto';
+import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
-@Controller('nurse')
-export class NurseController {
-  constructor(private readonly nurseService: NurseService) {}
+@Controller('doctor')
+export class DoctorController {
+  constructor(private readonly doctorService: DoctorService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createNurseDto: CreateNurseDto) {
+  async create(@Body() createDoctorDto: CreateDoctorDto) {
     try {
-      return await this.nurseService.create(createNurseDto);
+      return await this.doctorService.create(createDoctorDto);
     } catch (error) {
       if (error instanceof AlreadyExistsError) {
         throw new ConflictException(error.message);
@@ -40,14 +38,14 @@ export class NurseController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async findAll() {
-    return await this.nurseService.findAll();
+    return await this.doctorService.findAll();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async findOne(@Param('id') id: string) {
     try {
-      return await this.nurseService.findOne(+id);
+      return await this.doctorService.findOne(+id);
     } catch (error) {
       if (error instanceof NotFoundError) {
         throw new NotFoundException(error.message);
@@ -60,10 +58,10 @@ export class NurseController {
   @HttpCode(HttpStatus.CREATED)
   async update(
     @Param('id') id: string,
-    @Body() updateNurseDto: UpdateNurseDto,
+    @Body() updateDoctorDto: UpdateDoctorDto,
   ) {
     try {
-      return await this.nurseService.update(+id, updateNurseDto);
+      return await this.doctorService.update(+id, updateDoctorDto);
     } catch (error) {
       if (error instanceof NotFoundError) {
         throw new NotFoundException(error.message);
@@ -79,7 +77,7 @@ export class NurseController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string) {
     try {
-      return await this.nurseService.remove(+id);
+      return await this.doctorService.remove(+id);
     } catch (error) {
       if (error instanceof NotFoundError) {
         throw new NotFoundException(error.message);
