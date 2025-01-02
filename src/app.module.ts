@@ -7,6 +7,7 @@ import { ConfigModule } from './common/config/config.module';
 import { DoctorModule } from './doctor/doctor.module';
 import { NurseModule } from './nurse/nurse.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { EducationModule } from './education/education.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PrismaModule } from './prisma/prisma.module';
     NurseModule,
     ConfigModule,
     DoctorModule,
+    EducationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
