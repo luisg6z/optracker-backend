@@ -44,7 +44,6 @@ model Doctor {
   speciality    String
   licenseNumber String
   dea           String
-  education     Education[]     @relation("DoctorStudies")
   DoctorStudies DoctorStudies[]
   DoctorSurgery DoctorSurgery[]
 }
@@ -72,9 +71,7 @@ model Nurse {
 
 model Education {
   id              Int             @id @default(autoincrement())
-  doctorId        Int
   institutionName String          @unique
-  doctor          Doctor          @relation("DoctorStudies", fields: [doctorId], references: [id])
   DoctorStudies   DoctorStudies[]
   NurseStudies    NurseStudies[]
 }
