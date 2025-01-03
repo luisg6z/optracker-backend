@@ -6,22 +6,21 @@ import {
   UnexpectedError,
 } from 'src/common/errors/service.errors';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreatePatientDto } from './dto/create-patient.dto';
-import { UpdatePatientDto } from './dto/update-patient.dto';
+import { CreatePatientDto } from '../dto/create-patient.dto';
+import { UpdatePatientDto } from '../dto/update-patient.dto';
+import { GetPatientAction } from './get-patient.action';
 
 @Injectable()
 export class PatientService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly getPatient: GetPatientAction,
+  ) {}
 
   async create(createPatientDto: CreatePatientDto) {
     try {
-      const patientExists = await this.findOneByDNI(createPatientDto.dni);
-
-      if (patientExists.length !== 0) {
-        throw new AlreadyExistsError(
-          `A Patient with the dni ${createPatientDto.dni} already exists`,
-        );
-      }
+      // take to other function for better validation
+      await this.getPatient.validatePatientExists(createPatientDto);
 
       return await this.prisma.patient.create({
         data: createPatientDto,
@@ -32,7 +31,7 @@ export class PatientService {
         error?.code === 'P2002'
       ) {
         throw new AlreadyExistsError(
-          `A Patient with the dni ${createPatientDto.dni} already exists`,
+          `A Patient with the dni ${createPatientDto.dni} or email ${createPatientDto.email} already exists`,
         );
       }
       if (error instanceof AlreadyExistsError) {
@@ -63,51 +62,7 @@ export class PatientService {
   }
 
   async findOne(id: number) {
-    try {
-      return await this.prisma.patient.findUniqueOrThrow({
-        where: {
-          id: id,
-        },
-        select: {
-          id: true,
-          dni: true,
-          name: true,
-          lastName: true,
-          email: true,
-          bloodType: true,
-          gender: true,
-          height: true,
-          weight: true,
-          EmergencyContact: true,
-          Surgery: true,
-        },
-      });
-    } catch (error) {
-      if (
-        error instanceof PrismaClientKnownRequestError &&
-        error?.code === 'P2025'
-      ) {
-        throw new NotFoundError(`A patient with the id ${id} doesn't exists`);
-      }
-      throw new UnexpectedError('a unexpected situation ocurred');
-    }
-  }
-
-  async findOneByDNI(dni: string) {
-    return await this.prisma.doctor.findMany({
-      where: {
-        dni: dni,
-      },
-      select: {
-        id: true,
-        dni: true,
-        dea: true,
-        names: true,
-        lastNames: true,
-        speciality: true,
-        licenseNumber: true,
-      },
-    });
+    return this.getPatient.findOne(id);
   }
 
   async update(id: number, updatePatientDto: UpdatePatientDto) {

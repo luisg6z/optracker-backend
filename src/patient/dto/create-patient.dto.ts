@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BloodType, Gender } from '@prisma/client';
 import {
-  IsDecimal,
   IsEmail,
   IsEnum,
   IsNotEmpty,
+  IsNumber,
   IsString,
 } from 'class-validator';
 
@@ -32,12 +32,12 @@ export class CreatePatientDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsDecimal()
+  @IsNumber()
   weight: number;
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsDecimal()
+  @IsNumber()
   height: number;
 
   @ApiProperty()

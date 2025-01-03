@@ -18,7 +18,7 @@ import {
 } from 'src/common/errors/service.errors';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
-import { PatientService } from './patient.service';
+import { PatientService } from './services/patient.service';
 
 @Controller('patient')
 export class PatientController {
@@ -28,6 +28,7 @@ export class PatientController {
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createPatientDto: CreatePatientDto) {
     try {
+      console.log(createPatientDto);
       return await this.patientService.create(createPatientDto);
     } catch (error) {
       if (error instanceof AlreadyExistsError) {
