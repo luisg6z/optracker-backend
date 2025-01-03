@@ -16,14 +16,14 @@ export class NurseService {
 
   async create(createNurseDto: CreateNurseDto) {
     try {
-      const hashedPassword = bcrypt.hash(
+      const hashedPassword = await bcrypt.hash(
         createNurseDto.password,
         Number(process.env.SALT_ROUNDS),
       );
       return await this.prisma.nurse.create({
         data: {
-          password: hashedPassword,
           ...createNurseDto,
+          password: hashedPassword,
         },
       });
     } catch (error) {
@@ -34,7 +34,7 @@ export class NurseService {
           );
         }
       }
-      throw new UnexpectedError('An unexpected error ocurred');
+      throw new UnexpectedError(error.message);
     }
   }
 
