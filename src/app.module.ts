@@ -8,6 +8,7 @@ import { DoctorModule } from './doctor/doctor.module';
 import { NurseModule } from './nurse/nurse.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { EducationModule } from './education/education.module';
+import { PatientModule } from './patient/patient.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { EducationModule } from './education/education.module';
     ConfigModule,
     DoctorModule,
     EducationModule,
+    PatientModule,
   ],
   controllers: [AppController],
   providers: [AppService],
