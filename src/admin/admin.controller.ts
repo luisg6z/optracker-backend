@@ -1,9 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ConflictException, InternalServerErrorException, NotFoundException, HttpStatus, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ConflictException, InternalServerErrorException, NotFoundException, HttpStatus, HttpCode, UseGuards } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { AlreadyExistsError, NotFoundError } from 'src/common/errors/service.errors';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from 'src/auth/guard/auth.guard';
 
+
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @Controller('admin')
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
@@ -31,7 +36,7 @@ export class AdminController {
   @HttpCode(HttpStatus.OK)
   async findOne(@Param('id') id: string) {
     try {
-      return await this.adminService.findOne(+id);
+      return await this.adminService.findOneById(+id);
     } catch (error) {
       if (error instanceof NotFoundError) {
         throw new NotFoundException(error.message)
