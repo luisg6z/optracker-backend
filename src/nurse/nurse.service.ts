@@ -52,7 +52,7 @@ export class NurseService {
     });
   }
 
-  async findOne(id: number) {
+  async findOnebyId(id: number) {
     try {
       return await this.prisma.nurse.findUniqueOrThrow({
         where: {
@@ -76,6 +76,19 @@ export class NurseService {
       }
       throw new UnexpectedError('a unexpected situation ocurred');
     }
+  }
+
+  async findOneByEmail(email: string) {
+    return await this.prisma.nurse.findUnique({
+      where: {
+        email: email,
+      },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+      },
+    });
   }
 
   async update(id: number, updateNurseDto: UpdateNurseDto) {
