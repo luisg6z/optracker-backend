@@ -5,10 +5,13 @@ import { UpdateAdminDto } from './dto/update-admin.dto';
 import { AlreadyExistsError, NotFoundError } from 'src/common/errors/service.errors';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
+import { Roles } from 'src/auth/decorator/roles.decorator';
+import { Role } from 'src/common/constants';
 
 
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
 @Controller('admin')
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
@@ -27,6 +30,7 @@ export class AdminController {
   }
 
   @Get()
+  @Roles(Role.ADMIN)
   @HttpCode(HttpStatus.OK)
   async findAll() {
     return await this.adminService.findAll();
