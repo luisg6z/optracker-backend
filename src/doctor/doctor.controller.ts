@@ -12,8 +12,10 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { NotFoundError } from 'rxjs';
-import { AlreadyExistsError } from 'src/common/errors/service.errors';
+import {
+  AlreadyExistsError,
+  NotFoundError,
+} from 'src/common/errors/service.errors';
 import { DoctorService } from './doctor.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
