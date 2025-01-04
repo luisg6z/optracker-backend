@@ -15,9 +15,9 @@ export class DoctorService {
 
   async create(createDoctorDto: CreateDoctorDto) {
     try {
-      const doctor = await this.findOneByDNI(createDoctorDto.dni);
+      const doctorExists = await this.findOneByDNI(createDoctorDto.dni);
 
-      if (doctor.length !== 0) {
+      if (doctorExists.length !== 0) {
         throw new AlreadyExistsError(
           `A Doctor with the dni ${createDoctorDto.dni} already exists`,
         );
@@ -84,7 +84,7 @@ export class DoctorService {
         error instanceof PrismaClientKnownRequestError &&
         error?.code === 'P2025'
       ) {
-        throw new NotFoundError(`A nurse with the id ${id} doesn't exists`);
+        throw new NotFoundError(`A doctor with the id ${id} doesn't exists`);
       }
       throw new UnexpectedError('a unexpected situation ocurred');
     }

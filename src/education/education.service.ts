@@ -15,11 +15,11 @@ export class EducationService {
 
   async create(createEducationDto: CreateEducationDto) {
     try {
-      const education = await this.findOneByName(
+      const educationExists = await this.findOneByName(
         createEducationDto.institutionName,
       );
 
-      if (education.length !== 0) {
+      if (educationExists.length !== 0) {
         throw new AlreadyExistsError(
           `A Education Center with the name ${createEducationDto.institutionName} already exists`,
         );
