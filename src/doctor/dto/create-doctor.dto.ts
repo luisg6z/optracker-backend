@@ -5,12 +5,12 @@ export class CreateDoctorDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  name: string;
+  names: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  lastName: string;
+  lastNames: string;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -20,7 +20,7 @@ export class CreateDoctorDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  licneseNumber: string;
+  licenseNumber: string;
 
   @ApiProperty()
   @IsNotEmpty()

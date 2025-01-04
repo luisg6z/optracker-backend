@@ -24,14 +24,7 @@ export class DoctorService {
       }
 
       return await this.prisma.doctor.create({
-        data: {
-          dni: createDoctorDto.dni,
-          dea: createDoctorDto.dea,
-          names: createDoctorDto.name,
-          lastNames: createDoctorDto.lastName,
-          speciality: createDoctorDto.speciality,
-          licenseNumber: createDoctorDto.licneseNumber,
-        },
+        data: createDoctorDto,
       });
     } catch (error) {
       if (
