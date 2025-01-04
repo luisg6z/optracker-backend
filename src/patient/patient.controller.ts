@@ -57,6 +57,32 @@ export class PatientController {
     }
   }
 
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  async findOneWithEmergencyContact(@Param('id') id: string) {
+    try {
+      return await this.patientService.findOne(+id);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        throw new NotFoundException(error.message);
+      }
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  async findOneWithSurgicalHistory(@Param('id') id: string) {
+    try {
+      return await this.patientService.findOne(+id);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        throw new NotFoundException(error.message);
+      }
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
   @Patch(':id')
   @HttpCode(HttpStatus.CREATED)
   async update(

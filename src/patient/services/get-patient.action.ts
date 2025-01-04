@@ -29,6 +29,24 @@ export class GetPatientAction {
     }
   }
 
+  async findAll() {
+    return await this.prisma.patient.findMany({
+      select: {
+        id: true,
+        dni: true,
+        name: true,
+        lastName: true,
+        email: true,
+        bloodType: true,
+        gender: true,
+        height: true,
+        weight: true,
+        EmergencyContact: true,
+        Surgery: true,
+      },
+    });
+  }
+
   async findOne(id: number) {
     try {
       return await this.prisma.patient.findUniqueOrThrow({
@@ -45,7 +63,65 @@ export class GetPatientAction {
           gender: true,
           height: true,
           weight: true,
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error?.code === 'P2025'
+      ) {
+        throw new NotFoundError(`A patient with the id ${id} doesn't exists`);
+      }
+      throw new UnexpectedError('a unexpected situation ocurred');
+    }
+  }
+
+  async findOneWithEmergencyContact(id: number) {
+    try {
+      return await this.prisma.patient.findUniqueOrThrow({
+        where: {
+          id: id,
+        },
+        select: {
+          id: true,
+          dni: true,
+          name: true,
+          lastName: true,
+          email: true,
+          bloodType: true,
+          gender: true,
+          height: true,
+          weight: true,
           EmergencyContact: true,
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error?.code === 'P2025'
+      ) {
+        throw new NotFoundError(`A patient with the id ${id} doesn't exists`);
+      }
+      throw new UnexpectedError('a unexpected situation ocurred');
+    }
+  }
+
+  async findOneWithSurgicalHistory(id: number) {
+    try {
+      return await this.prisma.patient.findUniqueOrThrow({
+        where: {
+          id: id,
+        },
+        select: {
+          id: true,
+          dni: true,
+          name: true,
+          lastName: true,
+          email: true,
+          bloodType: true,
+          gender: true,
+          height: true,
+          weight: true,
           Surgery: true,
         },
       });

@@ -44,25 +44,19 @@ export class PatientService {
   // ? See the output of EmergencyContact and Surgery
   // ! Make endpoints for getting the information of it's contacts and surgicla history
   async findAll() {
-    return await this.prisma.patient.findMany({
-      select: {
-        id: true,
-        dni: true,
-        name: true,
-        lastName: true,
-        email: true,
-        bloodType: true,
-        gender: true,
-        height: true,
-        weight: true,
-        EmergencyContact: true,
-        Surgery: true,
-      },
-    });
+    return await this.getPatient.findAll();
   }
 
   async findOne(id: number) {
-    return this.getPatient.findOne(id);
+    return await this.getPatient.findOne(id);
+  }
+
+  async findOneWithEmergencyContact(id: number) {
+    return await this.getPatient.findOneWithEmergencyContact(id);
+  }
+
+  async findOneWithSurgicalHistory(id: number) {
+    return await this.getPatient.findOneWithSurgicalHistory(id);
   }
 
   async update(id: number, updatePatientDto: UpdatePatientDto) {
