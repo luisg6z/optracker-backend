@@ -47,7 +47,7 @@ export class NurseController {
   @HttpCode(HttpStatus.OK)
   async findOne(@Param('id') id: string) {
     try {
-      return await this.nurseService.findOne(+id);
+      return await this.nurseService.findOnebyId(+id);
     } catch (error) {
       if (error instanceof NotFoundError) {
         throw new NotFoundException(error.message);

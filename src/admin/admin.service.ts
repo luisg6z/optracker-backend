@@ -50,7 +50,7 @@ export class AdminService {
     })
   }
 
-  async findOne(id: number) { 
+  async findOneById(id: number) { 
       try {
         return await this.prisma.administrator.findUniqueOrThrow({
           where: {
@@ -72,6 +72,20 @@ export class AdminService {
         throw new UnexpectedError("an unexpected situation ocurred")
       }
   }
+
+  async findOneByEmail(email: string){ 
+    return await this.prisma.administrator.findUnique({
+      where: {
+        email: email
+      },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+      }
+    });
+}
+
   async update(id: number, updateAdminDto: UpdateAdminDto) {
 
       try {
