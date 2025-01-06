@@ -8,4 +8,5 @@ import { SurgeryController } from './surgery.controller';
   providers: [SurgeryService],
   imports: [PrismaModule],
 })
+  
 export class SurgeryModule {}

@@ -1,12 +1,21 @@
 import {
   Body,
+  ConflictException,
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
+  InternalServerErrorException,
+  NotFoundException,
   Param,
   Patch,
   Post,
 } from '@nestjs/common';
+import {
+  AlreadyExistsError,
+  NotFoundError,
+} from 'src/common/errors/service.errors';
 import { CreateSurgeryDto } from './dto/create-surgery.dto';
 import { UpdateSurgeryDto } from './dto/update-surgery.dto';
 import { SurgeryService } from './services/surgery.service';
@@ -16,27 +25,60 @@ export class SurgeryController {
   constructor(private readonly surgeryService: SurgeryService) {}
 
   @Post()
-  create(@Body() createSurgeryDto: CreateSurgeryDto) {
-    return this.surgeryService.create(createSurgeryDto);
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() createSurgeryDto: CreateSurgeryDto) {
+    try {
+      return await this.surgeryService.create(createSurgeryDto);
+    } catch (error) {
+      if (error instanceof AlreadyExistsError) {
+        throw new ConflictException(error.message);
+      }
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   @Get()
-  findAll() {
+  @HttpCode(HttpStatus.OK)
+  async findAll() {
     return this.surgeryService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.surgeryService.findOne(+id);
+  @HttpCode(HttpStatus.OK)
+  async findOne(@Param('id') id: string) {
+    try {
+      return await this.surgeryService.findOne(+id);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        throw new NotFoundException(error.message);
+      }
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSurgeryDto: UpdateSurgeryDto) {
-    return this.surgeryService.update(+id, updateSurgeryDto);
+  @HttpCode(HttpStatus.CREATED)
+  async update(@Param('id') id: string, @Body() updateSurgeryDto: UpdateSurgeryDto) {
+    try {
+      return await this.surgeryService.update(+id, updateSurgeryDto);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        throw new NotFoundException(error.message);
+      }
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.surgeryService.remove(+id);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async remove(@Param('id') id: string) {
+    try {
+      return await this.surgeryService.remove(+id);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        throw new NotFoundException(error.message);
+      }
+      throw new InternalServerErrorException(error.message);
+    }
   }
 }
