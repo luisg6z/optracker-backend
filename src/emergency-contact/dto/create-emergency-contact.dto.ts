@@ -1,26 +1,22 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class CreateDoctorDto {
+export class CreateEmergencyContactDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  names: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  lastNames: string;
+  name: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  speciality: string;
+  lastName: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  licenseNumber: string;
+  @IsEmail()
+  email: string;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -30,5 +26,10 @@ export class CreateDoctorDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  dea: string;
+  phoneNumber: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  patientId: number;
 }
