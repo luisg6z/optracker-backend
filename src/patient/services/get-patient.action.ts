@@ -63,6 +63,7 @@ export class GetPatientAction {
           gender: true,
           height: true,
           weight: true,
+          EmergencyContact: true,
         },
       });
     } catch (error) {
