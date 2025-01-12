@@ -48,6 +48,7 @@ export class NurseService {
         speciality: true,
         licenseNumber: true,
         dea: true,
+        dni: true,
       },
     });
   }
@@ -66,6 +67,7 @@ export class NurseService {
           speciality: true,
           licenseNumber: true,
           dea: true,
+          dni: true,
         },
       });
     } catch (error) {

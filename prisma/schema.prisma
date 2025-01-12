@@ -65,6 +65,7 @@ model Nurse {
   speciality    String
   licenseNumber String
   dea           String
+  dni           String
   NurseStudies  NurseStudies[]
   NurseSurgery  NurseSurgery[]
 }
@@ -80,10 +81,15 @@ model Patient {
   id               Int                @id @default(autoincrement())
   dni              String             @unique
   email            String             @unique
+  birthDate        DateTime
+  phoneNumber      String
+  alergies         String[]
   name             String
   lastName         String
   weight           Decimal
   height           Decimal
+  createAt         DateTime           @default(now())
+  updateAt         DateTime           @updatedAt
   gender           Gender
   bloodType        BloodType
   Surgery          Surgery[]

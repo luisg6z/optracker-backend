@@ -37,4 +37,9 @@ export class CreateNurseDto {
   @IsNotEmpty()
   @IsString()
   dea: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  dni: string;
 }
