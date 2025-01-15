@@ -79,6 +79,8 @@ export class GetPatientAction {
           createAt: true,
           updateAt: true,
           deleteAt: true,
+          EmergencyContact: true,
+          Surgery: true,
         },
       });
     } catch (error) {
