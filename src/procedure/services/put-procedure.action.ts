@@ -110,7 +110,7 @@ export class PutProcedureAction {
       const procedure = await this.getProcedureAction.findOneToSoftDelete(id);
 
       if (!procedure) {
-        throw new NotFoundError(`A patient with the id ${id} doesn't exists`);
+        throw new NotFoundError(`A procedure with the id ${id} doesn't exists`);
       }
 
       return await this.prisma.procedure.update({

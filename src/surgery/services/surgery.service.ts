@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import {
   NotFoundError,
   UnexpectedError,
@@ -9,7 +8,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateSurgeryDto } from '../dto/create-surgery.dto';
 import { UpdateSurgeryDto } from '../dto/update-surgery.dto';
 import { GetSurgeryAction } from './get-surgery.action';
-import { PutSurgeryAction } from './put-surgery-action';
+import { PutSurgeryAction } from './put-surgery.action';
 
 @Injectable()
 export class SurgeryService {
@@ -29,31 +28,27 @@ export class SurgeryService {
   }
 
   async findOne(id: number) {
-    return await this.patientService.findOne(id);
-  }
-
-  async update(id: number, updateSurgeryDto: UpdateSurgeryDto) {
-    return this.putSurgeryAction.update(id, updateSurgeryDto);
-  }
-
-  async remove(id: number) {
     try {
-      return await this.prisma.surgery.delete({
-        where: {
-          id: id,
-        },
-      });
-    } catch (error) {
-      if (
-        error instanceof PrismaClientKnownRequestError &&
-        error?.code === 'P2025'
-      ) {
-        throw new NotFoundError(`Surgery with id ${id} not found`);
+      const surgery = await this.getSurgeryAction.findOne(id);
+
+      if (surgery.deleteAt) {
+        throw new NotFoundError(`A surgery with the id ${id} doesn't exists`);
       }
+
+      return surgery;
+    } catch (error) {
       if (error instanceof NotFoundError) {
         throw new NotFoundError(error.message);
       }
       throw new UnexpectedError('An unexpected error ocurred');
     }
+  }
+
+  async update(id: number, updateSurgeryDto: UpdateSurgeryDto) {
+    return await this.putSurgeryAction.update(id, updateSurgeryDto);
+  }
+
+  async remove(id: number) {
+    return await this.putSurgeryAction.softDelete(id);
   }
 }

@@ -38,4 +38,9 @@ export class CreateSurgeryDto {
   @IsNotEmpty()
   @IsNumber({}, { each: true })
   doctorIds: number[];
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber({}, { each: true })
+  procedureIds: number[];
 }

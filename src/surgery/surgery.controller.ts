@@ -58,7 +58,10 @@ export class SurgeryController {
 
   @Patch(':id')
   @HttpCode(HttpStatus.CREATED)
-  async update(@Param('id') id: string, @Body() updateSurgeryDto: UpdateSurgeryDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateSurgeryDto: UpdateSurgeryDto,
+  ) {
     try {
       return await this.surgeryService.update(+id, updateSurgeryDto);
     } catch (error) {

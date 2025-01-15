@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { NotFoundError } from 'rxjs';
-import { UnexpectedError } from 'src/common/errors/service.errors';
+import {
+  NotFoundError,
+  UnexpectedError,
+} from 'src/common/errors/service.errors';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -10,11 +12,15 @@ export class GetSurgeryAction {
 
   async findAll() {
     return await this.prisma.surgery.findMany({
+      where: {
+        deleteAt: null,
+      },
       select: {
+        id: true,
         title: true,
         date: true,
         status: true,
-        patient: true,
+        Patient: true,
         DoctorSurgery: {
           select: {
             doctor: true,
@@ -23,6 +29,11 @@ export class GetSurgeryAction {
         NurseSurgery: {
           select: {
             nurse: true,
+          },
+        },
+        ProcedurePerSurgery: {
+          select: {
+            procedure: true,
           },
         },
       },
@@ -36,10 +47,15 @@ export class GetSurgeryAction {
           id: id,
         },
         select: {
+          id: true,
           title: true,
           date: true,
           status: true,
-          patient: true,
+          patientId: true,
+          Patient: true,
+          createAt: true,
+          updateAt: true,
+          deleteAt: true,
           DoctorSurgery: {
             select: {
               doctor: true,
@@ -50,6 +66,36 @@ export class GetSurgeryAction {
               nurse: true,
             },
           },
+          ProcedurePerSurgery: {
+            select: {
+              procedure: true,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error?.code === 'P2025'
+      ) {
+        throw new NotFoundError(`Surgery with id ${id} not found`);
+      }
+      throw new UnexpectedError('An unexpected error ocurred');
+    }
+  }
+
+  async findOneToSoftDelete(id: number) {
+    try {
+      return await this.prisma.surgery.findUniqueOrThrow({
+        where: {
+          id: id,
+        },
+        select: {
+          title: true,
+          date: true,
+          status: true,
+          patientId: true,
+          deleteAt: true,
         },
       });
     } catch (error) {
