@@ -30,7 +30,10 @@ export class SurgeryService {
       }
 
       return await this.prisma.surgery.create({
-        data: createSurgeryDto,
+        data: {
+          date: new Date(createSurgeryDto.date),
+          ...createSurgeryDto,
+        },
       });
     } catch (error) {
       if (
@@ -62,7 +65,10 @@ export class SurgeryService {
         where: {
           id: id,
         },
-        data: updateSurgeryDto,
+        data: {
+          date: new Date(updateSurgeryDto.date),
+          ...updateSurgeryDto,
+        },
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {

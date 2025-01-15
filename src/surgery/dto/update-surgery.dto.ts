@@ -1,7 +1,7 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { Status } from '@prisma/client';
 import {
-  IsDate,
+  IsDateString,
   IsEnum,
   IsNumber,
   IsOptional,
@@ -17,13 +17,8 @@ export class UpdateSurgeryDto extends PartialType(CreateSurgeryDto) {
 
   @ApiProperty()
   @IsOptional()
-  @IsDate()
+  @IsDateString()
   date: Date;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsDate()
-  hour: Date;
 
   @ApiProperty()
   @IsOptional()
