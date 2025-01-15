@@ -21,7 +21,6 @@ export class PatientService {
     try {
       // take to other function for better validation
       await this.getPatient.validatePatientExists(createPatientDto);
-      console.log(new Date('2002-01-02').toISOString());
 
       return await this.prisma.patient.create({
         data: {
@@ -86,7 +85,33 @@ export class PatientService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} patient`;
+  async remove(id: number) {
+    try {
+      const patient = await this.getPatient.findOneToSoftDelete(id);
+
+      if (!patient) {
+        throw new NotFoundError(`A patient with the id ${id} doesn't exists`);
+      }
+
+      return await this.prisma.patient.update({
+        where: {
+          id: id,
+        },
+        data: {
+          deleteAt: new Date(),
+          ...patient,
+        },
+      });
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new NotFoundError(`A patient with the id ${id} doesn't exists`);
+        }
+      }
+      if (error instanceof NotFoundError) {
+        throw new NotFoundError(error.message);
+      }
+      throw new UnexpectedError('a unexpected situation ocurred');
+    }
   }
 }

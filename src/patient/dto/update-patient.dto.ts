@@ -1,11 +1,10 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { BloodType, Gender } from '@prisma/client';
 import {
-  IsArray,
   IsDateString,
-  IsDecimal,
   IsEmail,
   IsEnum,
+  IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
@@ -36,7 +35,6 @@ export class UpdatePatientDto extends PartialType(CreatePatientDto) {
   @ApiProperty()
   @IsOptional()
   @IsString()
-  @IsArray()
   alergies: string;
 
   @ApiProperty()
@@ -51,12 +49,12 @@ export class UpdatePatientDto extends PartialType(CreatePatientDto) {
 
   @ApiProperty()
   @IsOptional()
-  @IsDecimal()
+  @IsNumber()
   weight: number;
 
   @ApiProperty()
   @IsOptional()
-  @IsDecimal()
+  @IsNumber()
   height: number;
 
   @ApiProperty()

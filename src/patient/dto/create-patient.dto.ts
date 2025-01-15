@@ -6,6 +6,7 @@ import {
   IsEnum,
   IsNotEmpty,
   IsNumber,
+  IsPositive,
   IsString,
 } from 'class-validator';
 
@@ -49,11 +50,13 @@ export class CreatePatientDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
+  @IsPositive()
   weight: number;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
+  @IsPositive()
   height: number;
 
   @ApiProperty()

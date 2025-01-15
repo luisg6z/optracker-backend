@@ -31,6 +31,9 @@ export class GetPatientAction {
 
   async findAll() {
     return await this.prisma.patient.findMany({
+      where: {
+        deleteAt: null,
+      },
       select: {
         id: true,
         dni: true,
@@ -48,6 +51,7 @@ export class GetPatientAction {
         updateAt: true,
         EmergencyContact: true,
         Surgery: true,
+        deleteAt: true,
       },
     });
   }
@@ -57,22 +61,24 @@ export class GetPatientAction {
       return await this.prisma.patient.findUniqueOrThrow({
         where: {
           id: id,
+          deleteAt: null,
         },
         select: {
           id: true,
           dni: true,
+          email: true,
           name: true,
           lastName: true,
-          email: true,
           alergies: true,
-          birthDate: true,
           phoneNumber: true,
-          bloodType: true,
-          gender: true,
+          birthDate: true,
+          weight: true,
           height: true,
+          gender: true,
+          bloodType: true,
           createAt: true,
           updateAt: true,
-          EmergencyContact: true,
+          deleteAt: true,
         },
       });
     } catch (error) {
@@ -86,11 +92,46 @@ export class GetPatientAction {
     }
   }
 
+  async findOneToSoftDelete(id: number) {
+    try {
+      console.log(id);
+      return await this.prisma.patient.findMany({
+        where: {
+          AND: { id: id, deleteAt: { not: null } },
+        },
+        select: {
+          dni: true,
+          email: true,
+          name: true,
+          lastName: true,
+          alergies: true,
+          phoneNumber: true,
+          birthDate: true,
+          weight: true,
+          height: true,
+          gender: true,
+          bloodType: true,
+          deleteAt: true,
+        },
+      })[0];
+    } catch (error) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error?.code === 'P2025'
+      ) {
+        throw new NotFoundError(`A patient with the id ${id} doesn't exists`);
+      }
+      console.log(error.message);
+      throw new UnexpectedError('a unexpected situation ocurred');
+    }
+  }
+
   async findOneWithEmergencyContact(id: number) {
     try {
       return await this.prisma.patient.findUniqueOrThrow({
         where: {
           id: id,
+          deleteAt: null,
         },
         select: {
           id: true,
@@ -124,6 +165,7 @@ export class GetPatientAction {
       return await this.prisma.patient.findUniqueOrThrow({
         where: {
           id: id,
+          deleteAt: null,
         },
         select: {
           id: true,

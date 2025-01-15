@@ -56,7 +56,7 @@ export class PatientController {
     }
   }
 
-  @Get(':id')
+  @Get('/contact/:id')
   @HttpCode(HttpStatus.OK)
   async findOneWithEmergencyContact(@Param('id') id: string) {
     try {
@@ -69,7 +69,7 @@ export class PatientController {
     }
   }
 
-  @Get(':id')
+  @Get('/history/:id')
   @HttpCode(HttpStatus.OK)
   async findOneWithSurgicalHistory(@Param('id') id: string) {
     try {
