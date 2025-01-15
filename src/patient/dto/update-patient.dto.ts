@@ -37,7 +37,7 @@ export class UpdatePatientDto extends PartialType(CreatePatientDto) {
   @IsOptional()
   @IsString()
   @IsArray()
-  alergies: string[];
+  alergies: string;
 
   @ApiProperty()
   @IsOptional()

@@ -21,9 +21,13 @@ export class PatientService {
     try {
       // take to other function for better validation
       await this.getPatient.validatePatientExists(createPatientDto);
+      console.log(new Date('2002-01-02').toISOString());
 
       return await this.prisma.patient.create({
-        data: createPatientDto,
+        data: {
+          birthDate: new Date(createPatientDto.birthDate).toISOString(),
+          ...createPatientDto,
+        },
       });
     } catch (error) {
       if (
@@ -37,12 +41,12 @@ export class PatientService {
       if (error instanceof AlreadyExistsError) {
         throw new AlreadyExistsError(error.message);
       }
-      throw new UnexpectedError('An unexpected error ocurred');
+      throw new UnexpectedError(`An unexpected error ocurred`);
     }
   }
 
   // ? See the output of EmergencyContact and Surgery
-  // ! Make endpoints for getting the information of it's contacts and surgicla history
+  // ! Make endpoints for getting the information of it's contacts and surgical history
   async findAll() {
     return await this.getPatient.findAll();
   }

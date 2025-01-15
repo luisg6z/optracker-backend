@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BloodType, Gender } from '@prisma/client';
 import {
-  IsArray,
   IsDate,
   IsEmail,
   IsEnum,
@@ -35,8 +34,7 @@ export class CreatePatientDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  @IsArray()
-  alergies: string[];
+  alergies: string;
 
   @ApiProperty()
   @IsNotEmpty()

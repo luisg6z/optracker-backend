@@ -28,7 +28,6 @@ export class PatientController {
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createPatientDto: CreatePatientDto) {
     try {
-      console.log(createPatientDto);
       return await this.patientService.create(createPatientDto);
     } catch (error) {
       if (error instanceof AlreadyExistsError) {

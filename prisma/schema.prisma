@@ -44,16 +44,21 @@ model Doctor {
   speciality    String
   licenseNumber String
   dea           String
+  createAt      DateTime        @default(now())
+  updateAt      DateTime        @updatedAt
+  deleteAt      DateTime?
   DoctorStudies DoctorStudies[]
   DoctorSurgery DoctorSurgery[]
 }
 
 model Administrator {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
   name     String
   lastName String
   password String
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
 }
 
 model Nurse {
@@ -66,6 +71,8 @@ model Nurse {
   licenseNumber String
   dea           String
   dni           String
+  createAt      DateTime       @default(now())
+  updateAt      DateTime       @updatedAt
   NurseStudies  NurseStudies[]
   NurseSurgery  NurseSurgery[]
 }
@@ -73,6 +80,8 @@ model Nurse {
 model Education {
   id              Int             @id @default(autoincrement())
   institutionName String          @unique
+  createAt        DateTime        @default(now())
+  updateAt        DateTime        @updatedAt
   DoctorStudies   DoctorStudies[]
   NurseStudies    NurseStudies[]
 }
@@ -83,13 +92,14 @@ model Patient {
   email            String             @unique
   birthDate        DateTime
   phoneNumber      String
-  alergies         String[]
+  alergies         String
   name             String
   lastName         String
   weight           Decimal
   height           Decimal
   createAt         DateTime           @default(now())
   updateAt         DateTime           @updatedAt
+  deleteAt         DateTime?
   gender           Gender
   bloodType        BloodType
   Surgery          Surgery[]
@@ -101,6 +111,8 @@ model Surgery {
   patientId     Int
   title         String
   date          DateTime
+  createAt      DateTime        @default(now())
+  updateAt      DateTime        @updatedAt
   status        Status
   patient       Patient         @relation(fields: [patientId], references: [id])
   Procedure     Procedure[]
@@ -109,14 +121,16 @@ model Surgery {
 }
 
 model EmergencyContact {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   patientId   Int
   name        String
   lastName    String
-  email       String  @unique
+  email       String   @unique
   phoneNumber String
-  dni         String  @unique
-  patient     Patient @relation(fields: [patientId], references: [id])
+  dni         String   @unique
+  createAt    DateTime @default(now())
+  updateAt    DateTime @updatedAt
+  patient     Patient  @relation(fields: [patientId], references: [id])
 }
 
 model Procedure {
@@ -125,6 +139,8 @@ model Procedure {
   name        String
   description String
   duration    DateTime
+  createAt    DateTime @default(now())
+  updateAt    DateTime @updatedAt
   surgery     Surgery  @relation(fields: [surgeryId], references: [id])
 
   @@id([id, surgeryId])
@@ -133,6 +149,8 @@ model Procedure {
 model DoctorStudies {
   doctorId    Int
   educationId Int
+  createAt    DateTime @default(now())
+  updateAt    DateTime @updatedAt
 
   doctor    Doctor    @relation(fields: [doctorId], references: [id])
   education Education @relation(fields: [educationId], references: [id])
@@ -143,6 +161,8 @@ model DoctorStudies {
 model NurseStudies {
   nurseId     Int
   educationId Int
+  createAt    DateTime @default(now())
+  updateAt    DateTime @updatedAt
 
   nurse     Nurse     @relation(fields: [nurseId], references: [id])
   education Education @relation(fields: [educationId], references: [id])
@@ -153,6 +173,8 @@ model NurseStudies {
 model DoctorSurgery {
   doctorId  Int
   surgeryId Int
+  createAt  DateTime @default(now())
+  updateAt  DateTime @updatedAt
 
   doctor  Doctor  @relation(fields: [doctorId], references: [id])
   surgery Surgery @relation(fields: [surgeryId], references: [id])
@@ -163,6 +185,8 @@ model DoctorSurgery {
 model NurseSurgery {
   nurseId   Int
   surgeryId Int
+  createAt  DateTime @default(now())
+  updateAt  DateTime @updatedAt
 
   nurse   Nurse   @relation(fields: [nurseId], references: [id])
   surgery Surgery @relation(fields: [surgeryId], references: [id])
