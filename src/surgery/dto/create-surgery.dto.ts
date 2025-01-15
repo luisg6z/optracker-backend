@@ -1,6 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Status } from '@prisma/client';
-import { IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+} from 'class-validator';
 
 export class CreateSurgeryDto {
   @ApiProperty()
@@ -15,11 +21,21 @@ export class CreateSurgeryDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsString()
+  @IsEnum(Status)
   status: Status;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
   patientId: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber({}, { each: true })
+  nurseIds: number[];
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber({}, { each: true })
+  doctorIds: number[];
 }

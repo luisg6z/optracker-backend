@@ -7,5 +7,6 @@ import { DoctorService } from './doctor.service';
   controllers: [DoctorController],
   providers: [DoctorService],
   imports: [PrismaModule],
+  exports: [DoctorModule],
 })
 export class DoctorModule {}

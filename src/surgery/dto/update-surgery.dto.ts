@@ -29,4 +29,14 @@ export class UpdateSurgeryDto extends PartialType(CreateSurgeryDto) {
   @IsOptional()
   @IsNumber()
   patientId: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber({}, { each: true })
+  nurseIds: number[];
+
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber({}, { each: true })
+  doctorIds: number[];
 }

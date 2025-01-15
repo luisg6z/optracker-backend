@@ -111,9 +111,11 @@ model Surgery {
   patientId     Int
   title         String
   date          DateTime
+  time          DateTime
   createAt      DateTime        @default(now())
   updateAt      DateTime        @updatedAt
-  status        Status
+  deleteAt      DateTime?
+  status        Status          @default(SCHEDULED)
   patient       Patient         @relation(fields: [patientId], references: [id])
   Procedure     Procedure[]
   DoctorSurgery DoctorSurgery[]
