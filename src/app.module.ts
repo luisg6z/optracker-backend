@@ -11,6 +11,7 @@ import { PatientModule } from './patient/patient.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { EmergencyContactModule } from './emergency-contact/emergency-contact.module';
 import { SurgeryModule } from './surgery/surgery.module';
+import { ProcedureModule } from './procedure/procedure.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { SurgeryModule } from './surgery/surgery.module';
     PatientModule,
     EmergencyContactModule,
     SurgeryModule,
+    ProcedureModule,
   ],
   controllers: [AppController],
   providers: [AppService],

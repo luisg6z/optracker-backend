@@ -36,6 +36,11 @@ enum BloodType {
   O_NEGATIVE
 }
 
+enum Duration {
+  MINUTOS
+  HORAS
+}
+
 model Doctor {
   id            Int             @id @default(autoincrement())
   dni           String          @unique
@@ -52,13 +57,14 @@ model Doctor {
 }
 
 model Administrator {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
   name     String
   lastName String
   password String
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  deleteAt DateTime?
+  createAt DateTime  @default(now())
+  updateAt DateTime  @updatedAt
 }
 
 model Nurse {
@@ -71,6 +77,7 @@ model Nurse {
   licenseNumber String
   dea           String
   dni           String
+  deleteAt      DateTime?
   createAt      DateTime       @default(now())
   updateAt      DateTime       @updatedAt
   NurseStudies  NurseStudies[]
@@ -107,19 +114,19 @@ model Patient {
 }
 
 model Surgery {
-  id            Int             @id @default(autoincrement())
-  patientId     Int
-  title         String
-  date          DateTime
-  time          DateTime
-  createAt      DateTime        @default(now())
-  updateAt      DateTime        @updatedAt
-  deleteAt      DateTime?
-  status        Status          @default(SCHEDULED)
-  patient       Patient         @relation(fields: [patientId], references: [id])
-  Procedure     Procedure[]
-  DoctorSurgery DoctorSurgery[]
-  NurseSurgery  NurseSurgery[]
+  id                  Int                   @id @default(autoincrement())
+  patientId           Int
+  title               String
+  date                DateTime
+  time                DateTime?
+  createAt            DateTime              @default(now())
+  updateAt            DateTime              @updatedAt
+  deleteAt            DateTime?
+  status              Status                @default(SCHEDULED)
+  DoctorSurgery       DoctorSurgery[]
+  NurseSurgery        NurseSurgery[]
+  ProcedurePerSurgery ProcedurePerSurgery[]
+  Patient             Patient               @relation(fields: [patientId], references: [id])
 }
 
 model EmergencyContact {
@@ -136,16 +143,15 @@ model EmergencyContact {
 }
 
 model Procedure {
-  id          Int      @default(autoincrement())
-  surgeryId   Int
-  name        String
-  description String
-  duration    DateTime
-  createAt    DateTime @default(now())
-  updateAt    DateTime @updatedAt
-  surgery     Surgery  @relation(fields: [surgeryId], references: [id])
-
-  @@id([id, surgeryId])
+  id                  Int                   @id @default(autoincrement())
+  name                String                @unique
+  description         String
+  durationHours       Int                   @default(0)
+  durationMinutes     Int                   @default(0)
+  createAt            DateTime              @default(now())
+  updateAt            DateTime              @updatedAt
+  deleteAt            DateTime?
+  ProcedurePerSurgery ProcedurePerSurgery[]
 }
 
 model DoctorStudies {
@@ -194,4 +200,16 @@ model NurseSurgery {
   surgery Surgery @relation(fields: [surgeryId], references: [id])
 
   @@id([surgeryId, nurseId])
+}
+
+model ProcedurePerSurgery {
+  surgeryId   Int
+  procedureId Int
+  createAt    DateTime @default(now())
+  updateAt    DateTime @updatedAt
+
+  procedure Procedure @relation(fields: [procedureId], references: [id])
+  surgery   Surgery   @relation(fields: [surgeryId], references: [id])
+
+  @@id([surgeryId, procedureId])
 }

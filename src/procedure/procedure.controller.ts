@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   ConflictException,
   Controller,
@@ -16,22 +17,25 @@ import {
   AlreadyExistsError,
   NotFoundError,
 } from 'src/common/errors/service.errors';
-import { CreateSurgeryDto } from './dto/create-surgery.dto';
-import { UpdateSurgeryDto } from './dto/update-surgery.dto';
-import { SurgeryService } from './services/surgery.service';
+import { CreateProcedureDto } from './dto/create-procedure.dto';
+import { UpdateProcedureDto } from './dto/update-procedure.dto';
+import { ProcedureService } from './services/procedure.service';
 
-@Controller('surgery')
-export class SurgeryController {
-  constructor(private readonly surgeryService: SurgeryService) {}
+@Controller('procedure')
+export class ProcedureController {
+  constructor(private readonly procedureService: ProcedureService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createSurgeryDto: CreateSurgeryDto) {
+  async create(@Body() createProcedureDto: CreateProcedureDto) {
     try {
-      return await this.surgeryService.create(createSurgeryDto);
+      return await this.procedureService.create(createProcedureDto);
     } catch (error) {
       if (error instanceof AlreadyExistsError) {
         throw new ConflictException(error.message);
+      }
+      if (error instanceof BadRequestException) {
+        throw new BadRequestException(error.message);
       }
       throw new InternalServerErrorException(error.message);
     }
@@ -39,15 +43,15 @@ export class SurgeryController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  async findAll() {
-    return this.surgeryService.findAll();
+  findAll() {
+    return this.procedureService.findAll();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async findOne(@Param('id') id: string) {
     try {
-      return await this.surgeryService.findOne(+id);
+      return await this.procedureService.findOne(+id);
     } catch (error) {
       if (error instanceof NotFoundError) {
         throw new NotFoundException(error.message);
@@ -60,13 +64,16 @@ export class SurgeryController {
   @HttpCode(HttpStatus.CREATED)
   async update(
     @Param('id') id: string,
-    @Body() updateSurgeryDto: UpdateSurgeryDto,
+    @Body() updateProcedureDto: UpdateProcedureDto,
   ) {
     try {
-      return await this.surgeryService.update(+id, updateSurgeryDto);
+      return await this.procedureService.update(+id, updateProcedureDto);
     } catch (error) {
       if (error instanceof NotFoundError) {
         throw new NotFoundException(error.message);
+      }
+      if (error instanceof AlreadyExistsError) {
+        throw new ConflictException(error.message);
       }
       throw new InternalServerErrorException(error.message);
     }
@@ -76,7 +83,7 @@ export class SurgeryController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string) {
     try {
-      return await this.surgeryService.remove(+id);
+      return await this.procedureService.remove(+id);
     } catch (error) {
       if (error instanceof NotFoundError) {
         throw new NotFoundException(error.message);
