@@ -14,6 +14,17 @@ export class GetSurgeryAction {
         title: true,
         date: true,
         status: true,
+        patient: true,
+        DoctorSurgery: {
+          select: {
+            doctor: true,
+          },
+        },
+        NurseSurgery: {
+          select: {
+            nurse: true,
+          },
+        },
       },
     });
   }
@@ -28,31 +39,17 @@ export class GetSurgeryAction {
           title: true,
           date: true,
           status: true,
-        },
-      });
-    } catch (error) {
-      if (
-        error instanceof PrismaClientKnownRequestError &&
-        error?.code === 'P2025'
-      ) {
-        throw new NotFoundError(`Surgery with id ${id} not found`);
-      }
-      throw new UnexpectedError('An unexpected error ocurred');
-    }
-  }
-
-  async findOneWithMedicalTeam(id: number) {
-    try {
-      return await this.prisma.surgery.findUniqueOrThrow({
-        where: {
-          id: id,
-        },
-        select: {
-          title: true,
-          date: true,
-          status: true,
-          DoctorSurgery: true,
-          NurseSurgery: true,
+          patient: true,
+          DoctorSurgery: {
+            select: {
+              doctor: true,
+            },
+          },
+          NurseSurgery: {
+            select: {
+              nurse: true,
+            },
+          },
         },
       });
     } catch (error) {
