@@ -2,7 +2,7 @@ import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { BloodType, Gender } from '@prisma/client';
 import {
   IsArray,
-  IsDate,
+  IsDateString,
   IsDecimal,
   IsEmail,
   IsEnum,
@@ -46,7 +46,7 @@ export class UpdatePatientDto extends PartialType(CreatePatientDto) {
 
   @ApiProperty()
   @IsOptional()
-  @IsDate()
+  @IsDateString()
   birthDate: Date;
 
   @ApiProperty()

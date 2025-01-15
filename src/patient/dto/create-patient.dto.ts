@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BloodType, Gender } from '@prisma/client';
 import {
-  IsDate,
+  IsDateString,
   IsEmail,
   IsEnum,
   IsNotEmpty,
@@ -43,7 +43,7 @@ export class CreatePatientDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsDate()
+  @IsDateString()
   birthDate: Date;
 
   @ApiProperty()
