@@ -19,7 +19,7 @@ export class EducationService {
         createEducationDto.institutionName,
       );
 
-      if (!educationExists) {
+      if (educationExists) {
         throw new AlreadyExistsError(
           `A Education Center with the name ${createEducationDto.institutionName} already exists`,
         );
