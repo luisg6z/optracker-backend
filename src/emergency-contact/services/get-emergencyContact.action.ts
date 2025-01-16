@@ -18,6 +18,7 @@ export class GetEmergencyContactAction {
         name: true,
         lastName: true,
         phoneNumber: true,
+        patient: true,
       },
     });
   }
@@ -35,6 +36,7 @@ export class GetEmergencyContactAction {
           name: true,
           lastName: true,
           phoneNumber: true,
+          patient: true,
         },
       });
     } catch (error) {
@@ -62,6 +64,7 @@ export class GetEmergencyContactAction {
         name: true,
         lastName: true,
         phoneNumber: true,
+        patient: true,
       },
     });
   }
@@ -78,6 +81,7 @@ export class GetEmergencyContactAction {
         name: true,
         lastName: true,
         phoneNumber: true,
+        patient: true,
       },
     });
   }

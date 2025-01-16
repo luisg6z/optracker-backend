@@ -19,26 +19,28 @@ export class EmergencyContactService {
   ) {}
 
   async create(createEmergencyContactDto: CreateEmergencyContactDto) {
-    this.putEmergencyContact.createEmergencyContact(createEmergencyContactDto);
+    return await this.putEmergencyContact.createEmergencyContact(
+      createEmergencyContactDto,
+    );
   }
 
   async findAll() {
-    await this.getEmergencyContact.findAll();
+    return await this.getEmergencyContact.findAll();
   }
 
   async findOne(id: number) {
-    await this.getEmergencyContact.findOne(id);
+    return await this.getEmergencyContact.findOne(id);
   }
 
   async findOneByDNI(dni: string) {
-    await this.getEmergencyContact.findOneByDNI(dni);
+    return await this.getEmergencyContact.findOneByDNI(dni);
   }
 
   async update(
     id: number,
     updateEmergencyContactDto: UpdateEmergencyContactDto,
   ) {
-    await this.putEmergencyContact.updateEmergencyContact(
+    return await this.putEmergencyContact.updateEmergencyContact(
       id,
       updateEmergencyContactDto,
     );
