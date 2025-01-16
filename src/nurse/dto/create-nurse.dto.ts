@@ -42,4 +42,9 @@ export class CreateNurseDto {
   @IsNotEmpty()
   @IsString()
   dni: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString({ each: true })
+  educationIds: string[];
 }

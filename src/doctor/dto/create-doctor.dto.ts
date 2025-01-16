@@ -31,4 +31,9 @@ export class CreateDoctorDto {
   @IsNotEmpty()
   @IsString()
   dea: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString({ each: true })
+  educationIds: string[];
 }

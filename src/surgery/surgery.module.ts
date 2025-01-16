@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { DoctorService } from 'src/doctor/doctor.service';
+import { EducationService } from 'src/education/education.service';
 import { NurseModule } from 'src/nurse/nurse.module';
 import { PatientModule } from 'src/patient/patient.module';
 import { PrismaModule } from 'src/prisma/prisma.module';
@@ -18,6 +19,7 @@ import { SurgeryController } from './surgery.controller';
     GetSurgeryAction,
     PutSurgeryAction,
     DoctorService,
+    EducationService,
     ProcedureService,
     GetProcedureAction,
     PutProcedureAction,

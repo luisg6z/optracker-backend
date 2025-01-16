@@ -5,13 +5,17 @@ import {
   NotFoundError,
   UnexpectedError,
 } from 'src/common/errors/service.errors';
+import { EducationService } from 'src/education/education.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 @Injectable()
 export class DoctorService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly educationService: EducationService,
+  ) {}
 
   async create(createDoctorDto: CreateDoctorDto) {
     try {
@@ -23,8 +27,26 @@ export class DoctorService {
         );
       }
 
+      const { educationIds, ...doctorData } = createDoctorDto;
+
+      const doctorStudies = [];
+      for (const value of educationIds) {
+        const education = await this.educationService.findOneByName(value);
+        if (!education) {
+          throw new NotFoundError('Education does not exists!');
+        }
+        doctorStudies.push({
+          educationId: education.id,
+        });
+      }
+
       return await this.prisma.doctor.create({
-        data: createDoctorDto,
+        data: {
+          DoctorStudies: {
+            create: doctorStudies,
+          },
+          ...doctorData,
+        },
       });
     } catch (error) {
       if (
@@ -38,6 +60,7 @@ export class DoctorService {
       if (error instanceof AlreadyExistsError) {
         throw new AlreadyExistsError(error.message);
       }
+      console.log(error.message);
       throw new UnexpectedError('An unexpected error ocurred');
     }
   }
@@ -52,6 +75,11 @@ export class DoctorService {
         lastNames: true,
         speciality: true,
         licenseNumber: true,
+        DoctorStudies: {
+          select: {
+            education: true,
+          },
+        },
       },
     });
   }

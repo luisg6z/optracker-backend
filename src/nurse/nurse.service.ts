@@ -6,13 +6,17 @@ import {
   NotFoundError,
   UnexpectedError,
 } from 'src/common/errors/service.errors';
+import { EducationService } from 'src/education/education.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateNurseDto } from './dto/create-nurse.dto';
 import { UpdateNurseDto } from './dto/update-nurse.dto';
 
 @Injectable()
 export class NurseService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly educationService: EducationService,
+  ) {}
 
   async create(createNurseDto: CreateNurseDto) {
     try {
@@ -20,10 +24,27 @@ export class NurseService {
         createNurseDto.password,
         Number(process.env.SALT_ROUNDS),
       );
+
+      const { educationIds, ...nurseData } = createNurseDto;
+
+      const nurseStudies = [];
+      for (const value of educationIds) {
+        const education = await this.educationService.findOneByName(value);
+        if (!education) {
+          throw new NotFoundError('Education does not exists!');
+        }
+        nurseStudies.push({
+          educationId: education.id,
+        });
+      }
+
       return await this.prisma.nurse.create({
         data: {
-          ...createNurseDto,
+          ...nurseData,
           password: hashedPassword,
+          NurseStudies: {
+            create: nurseStudies,
+          },
         },
       });
     } catch (error) {
@@ -49,6 +70,11 @@ export class NurseService {
         licenseNumber: true,
         dea: true,
         dni: true,
+        NurseStudies: {
+          select: {
+            education: true,
+          },
+        },
       },
     });
   }

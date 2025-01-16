@@ -19,7 +19,7 @@ export class EducationService {
         createEducationDto.institutionName,
       );
 
-      if (educationExists.length !== 0) {
+      if (!educationExists) {
         throw new AlreadyExistsError(
           `A Education Center with the name ${createEducationDto.institutionName} already exists`,
         );
@@ -76,15 +76,17 @@ export class EducationService {
   }
 
   async findOneByName(name: string) {
-    return await this.prisma.education.findMany({
-      where: {
-        institutionName: name,
-      },
-      select: {
-        id: true,
-        institutionName: true,
-      },
-    });
+    try {
+      return await this.prisma.education.findUnique({
+        where: {
+          institutionName: name,
+        },
+        select: {
+          id: true,
+          institutionName: true,
+        },
+      });
+    } catch (error) {}
   }
 
   async update(id: number, updateEducationDto: UpdateEducationDto) {
