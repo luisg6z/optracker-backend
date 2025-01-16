@@ -12,6 +12,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { EmergencyContactModule } from './emergency-contact/emergency-contact.module';
 import { SurgeryModule } from './surgery/surgery.module';
 import { ProcedureModule } from './procedure/procedure.module';
+import { SeederModule } from './seeder/seeder.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ProcedureModule } from './procedure/procedure.module';
     EmergencyContactModule,
     SurgeryModule,
     ProcedureModule,
+    SeederModule,
   ],
   controllers: [AppController],
   providers: [AppService],

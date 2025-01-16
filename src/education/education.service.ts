@@ -133,4 +133,17 @@ export class EducationService {
       throw new UnexpectedError('An unexpected situation ocurred');
     }
   }
+
+  async seed() {
+    const grades = ['Oncología', 'Cardiología', 'Radiología'];
+    const education = [];
+
+    grades.forEach((value) => {
+      education.push({
+        institutionName: value,
+      });
+    });
+
+    await this.prisma.education.createMany({ data: education });
+  }
 }
