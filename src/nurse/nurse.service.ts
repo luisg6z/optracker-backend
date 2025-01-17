@@ -94,6 +94,11 @@ export class NurseService {
           licenseNumber: true,
           dea: true,
           dni: true,
+          NurseStudies: {
+            select: {
+              education: true,
+            },
+          },
         },
       });
     } catch (error) {

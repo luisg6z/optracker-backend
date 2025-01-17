@@ -98,6 +98,11 @@ export class DoctorService {
           lastNames: true,
           speciality: true,
           licenseNumber: true,
+          DoctorStudies: {
+            select: {
+              education: true,
+            },
+          },
         },
       });
     } catch (error) {
