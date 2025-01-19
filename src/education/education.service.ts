@@ -135,7 +135,50 @@ export class EducationService {
   }
 
   async seed() {
-    const grades = ['Oncología', 'Cardiología', 'Radiología'];
+    const grades = [
+      'Cirujanos generales',
+      'Cirujanos cardiovasculares',
+      'Cirujanos ortopédicos',
+      'Neurocirujanos',
+      'Cirujanos plásticos',
+      'Cirujanos pediátricos',
+      'Cirujanos torácicos',
+      'Cirujanos vasculares',
+      'Cirujanos maxilofaciales',
+      'Cirujanos de trasplantes',
+      'Cirujanos urológicos',
+      'Cirujanos ginecológicos',
+      'Cirujanos oncólogos',
+      'Cirujanos otorrinolaringólogos',
+      'Cirujanos oftalmólogos',
+      'Anestesiólogos',
+      'Enfermeros de quirófano',
+      'Enfermeros instrumentistas',
+      'Enfermeros circulantes',
+      'Enfermeros anestesistas',
+      'Enfermeros de recuperación',
+      'Enfermeros de cuidados intensivos',
+      'Enfermeros de quirófano',
+      'Ayudan durante la cirugía directamente',
+      'Enfermeros instrumentistas',
+      'Manejan los instrumentos quirúrgicos',
+      'Enfermeros circulantes',
+      'Supervisan y asisten desde fuera del campo estéril',
+      'Enfermeros anestesistas',
+      'Colaboran con los anestesiólogos en la administración de anestesia',
+      'Enfermeros de recuperación',
+      'Monitorean al paciente tras la cirugía en el área de recuperación',
+      'Enfermeros de cuidados intensivos',
+      'Asisten a pacientes críticos en el pre o postoperatorio',
+      'Enfermeros generales',
+      'Atienden diferentes tareas básicas, como cuidado general y apoyo en el quirófano',
+      'Enfermeros administrativos',
+      'Encargados de gestionar documentos clínicos, registro de pacientes y organización general',
+      'Enfermeros de esterilización',
+      'Se aseguran de que todos los equipos e instrumentos estén debidamente esterilizados',
+      'Enfermeros de triage',
+      'Evalúan a los pacientes y priorizan su atención según la urgencia',
+    ];
     const education = [];
 
     grades.forEach((value) => {
