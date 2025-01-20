@@ -152,7 +152,6 @@ export class EducationService {
       'Cirujanos otorrinolaringólogos',
       'Cirujanos oftalmólogos',
       'Anestesiólogos',
-      'Enfermeros de quirófano',
       'Enfermeros instrumentistas',
       'Enfermeros circulantes',
       'Enfermeros anestesistas',
