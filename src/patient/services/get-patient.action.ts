@@ -80,7 +80,25 @@ export class GetPatientAction {
           updateAt: true,
           deleteAt: true,
           EmergencyContact: true,
-          Surgery: true,
+          Surgery: {
+            where: {
+              deleteAt: null,
+            },
+            select: {
+              date: true,
+              title: true,
+              DoctorSurgery: {
+                select: {
+                  doctor: true,
+                },
+              },
+              NurseSurgery: {
+                select: {
+                  nurse: true,
+                },
+              },
+            },
+          },
         },
       });
     } catch (error) {
