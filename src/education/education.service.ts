@@ -160,7 +160,6 @@ export class EducationService {
       'Enfermeros de cuidados intensivos',
       'Enfermeros de quirófano',
       'Ayudan durante la cirugía directamente',
-      'Enfermeros instrumentistas',
       'Manejan los instrumentos quirúrgicos',
       'Supervisan y asisten desde fuera del campo estéril',
       'Colaboran con los anestesiólogos en la administración de anestesia',
