@@ -206,6 +206,7 @@ model NurseSurgery {
 model ProcedurePerSurgery {
   surgeryId   Int
   procedureId Int
+  done        Boolean  @default(false)
   createAt    DateTime @default(now())
   updateAt    DateTime @updatedAt
 

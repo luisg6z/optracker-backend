@@ -17,7 +17,10 @@ import {
   NotFoundError,
 } from 'src/common/errors/service.errors';
 import { CreateSurgeryDto } from './dto/create-surgery.dto';
-import { UpdateSurgeryDto } from './dto/update-surgery.dto';
+import {
+  UpdateStatusProcedureDTO,
+  UpdateSurgeryDto,
+} from './dto/update-surgery.dto';
 import { SurgeryService } from './services/surgery.service';
 
 @Controller('surgery')
@@ -64,6 +67,21 @@ export class SurgeryController {
   ) {
     try {
       return await this.surgeryService.update(+id, updateSurgeryDto);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        throw new NotFoundException(error.message);
+      }
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  @Patch('/procedure/status')
+  @HttpCode(HttpStatus.CREATED)
+  async updateStatusProcedure(
+    @Body() updateSurgeryDto: UpdateStatusProcedureDTO,
+  ) {
+    try {
+      return await this.surgeryService.updateProcedureStatus(updateSurgeryDto);
     } catch (error) {
       if (error instanceof NotFoundError) {
         throw new NotFoundException(error.message);

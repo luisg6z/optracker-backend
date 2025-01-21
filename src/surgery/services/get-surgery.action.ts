@@ -108,4 +108,28 @@ export class GetSurgeryAction {
       throw new UnexpectedError('An unexpected error ocurred');
     }
   }
+
+  async findProcedurePerSurgery(inputIds: {
+    surgeryId: number;
+    procedureId: number;
+  }) {
+    try {
+      return await this.prisma.procedurePerSurgery.findUniqueOrThrow({
+        where: {
+          surgeryId_procedureId: inputIds,
+        },
+        select: {
+          done: true,
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error?.code === 'P2025'
+      ) {
+        throw new NotFoundError(`Surgery not found`);
+      }
+      throw new UnexpectedError('An unexpected error ocurred');
+    }
+  }
 }

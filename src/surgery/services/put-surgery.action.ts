@@ -11,7 +11,10 @@ import { PatientService } from 'src/patient/services/patient.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ProcedureService } from 'src/procedure/services/procedure.service';
 import { CreateSurgeryDto } from '../dto/create-surgery.dto';
-import { UpdateSurgeryDto } from '../dto/update-surgery.dto';
+import {
+  UpdateStatusProcedureDTO,
+  UpdateSurgeryDto,
+} from '../dto/update-surgery.dto';
 import { GetSurgeryAction } from './get-surgery.action';
 
 @Injectable()
@@ -119,6 +122,35 @@ export class PutSurgeryAction {
         }
         if (error.code === 'P2002') {
           throw new AlreadyExistsError(`Surgery with id ${id} already exists`);
+        }
+      }
+      if (error instanceof NotFoundError) {
+        throw new NotFoundError(error.message);
+      }
+      throw new UnexpectedError('An unexpected error ocurred');
+    }
+  }
+
+  async updateProcedureStatus(updateDto: UpdateStatusProcedureDTO) {
+    try {
+      return await this.prisma.procedurePerSurgery.update({
+        where: {
+          surgeryId_procedureId: {
+            procedureId: updateDto.procedureId,
+            surgeryId: updateDto.surgeryId,
+          },
+        },
+        data: {
+          done: updateDto.done,
+        },
+      });
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new NotFoundError(`Surgery not found`);
+        }
+        if (error.code === 'P2002') {
+          throw new AlreadyExistsError(`Surgery already exists`);
         }
       }
       if (error instanceof NotFoundError) {

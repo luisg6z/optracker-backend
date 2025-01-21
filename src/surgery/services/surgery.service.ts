@@ -6,7 +6,10 @@ import {
 import { PatientService } from 'src/patient/services/patient.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateSurgeryDto } from '../dto/create-surgery.dto';
-import { UpdateSurgeryDto } from '../dto/update-surgery.dto';
+import {
+  UpdateStatusProcedureDTO,
+  UpdateSurgeryDto,
+} from '../dto/update-surgery.dto';
 import { GetSurgeryAction } from './get-surgery.action';
 import { PutSurgeryAction } from './put-surgery.action';
 
@@ -46,6 +49,12 @@ export class SurgeryService {
 
   async update(id: number, updateSurgeryDto: UpdateSurgeryDto) {
     return await this.putSurgeryAction.update(id, updateSurgeryDto);
+  }
+
+  async updateProcedureStatus(updateProcedureStatus: UpdateStatusProcedureDTO) {
+    return await this.putSurgeryAction.updateProcedureStatus(
+      updateProcedureStatus,
+    );
   }
 
   async remove(id: number) {

@@ -1,8 +1,10 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { Status } from '@prisma/client';
 import {
+  IsBoolean,
   IsDateString,
   IsEnum,
+  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
@@ -44,4 +46,21 @@ export class UpdateSurgeryDto extends PartialType(CreateSurgeryDto) {
   @IsOptional()
   @IsNumber({}, { each: true })
   procedureIds: number[];
+}
+
+export class UpdateStatusProcedureDTO {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsBoolean()
+  surgeryId: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  procedureId: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsBoolean()
+  done: boolean;
 }
