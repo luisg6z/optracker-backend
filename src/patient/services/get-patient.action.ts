@@ -119,7 +119,7 @@ export class GetPatientAction {
       return await this.prisma.patient.findMany({
         where: {
           familyCode: {
-            contains: uuid,
+            startsWith: uuid,
           },
           deleteAt: null,
         },
