@@ -36,6 +36,11 @@ enum BloodType {
   O_NEGATIVE
 }
 
+enum Duration {
+  MINUTOS
+  HORAS
+}
+
 model Doctor {
   id            Int             @id @default(autoincrement())
   dni           String          @unique
@@ -44,45 +49,65 @@ model Doctor {
   speciality    String
   licenseNumber String
   dea           String
-  education     Education[]     @relation("DoctorStudies")
+  createAt      DateTime        @default(now())
+  updateAt      DateTime        @updatedAt
+  deleteAt      DateTime?
   DoctorStudies DoctorStudies[]
+  DoctorSurgery DoctorSurgery[]
 }
 
 model Administrator {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
   name     String
   lastName String
   password String
+  deleteAt DateTime?
+  createAt DateTime  @default(now())
+  updateAt DateTime  @updatedAt
 }
 
 model Nurse {
-  id            Int    @id @default(autoincrement())
-  email         String @unique
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
   name          String
   lastName      String
   password      String
   speciality    String
   licenseNumber String
   dea           String
+  dni           String
+  deleteAt      DateTime?
+  createAt      DateTime       @default(now())
+  updateAt      DateTime       @updatedAt
+  NurseStudies  NurseStudies[]
+  NurseSurgery  NurseSurgery[]
 }
 
 model Education {
   id              Int             @id @default(autoincrement())
   institutionName String          @unique
-  doctor          Doctor          @relation("DoctorStudies", fields: [doctorId], references: [id])
-  doctorId        Int
+  createAt        DateTime        @default(now())
+  updateAt        DateTime        @updatedAt
   DoctorStudies   DoctorStudies[]
+  NurseStudies    NurseStudies[]
 }
 
 model Patient {
   id               Int                @id @default(autoincrement())
+  familyCode       String             @unique
   dni              String             @unique
   email            String             @unique
+  birthDate        DateTime
+  phoneNumber      String
+  alergies         String
   name             String
   lastName         String
   weight           Decimal
   height           Decimal
+  createAt         DateTime           @default(now())
+  updateAt         DateTime           @updatedAt
+  deleteAt         DateTime?
   gender           Gender
   bloodType        BloodType
   Surgery          Surgery[]
@@ -90,39 +115,103 @@ model Patient {
 }
 
 model Surgery {
-  id        Int      @id @default(autoincrement())
-  patientId Int
-  title     String
-  date      DateTime
-  status    Status
-  patient   Patient  @relation(fields: [patientId], references: [id])
+  id                  Int                   @id @default(autoincrement())
+  patientId           Int
+  title               String
+  date                DateTime
+  time                DateTime?
+  createAt            DateTime              @default(now())
+  updateAt            DateTime              @updatedAt
+  deleteAt            DateTime?
+  status              Status                @default(SCHEDULED)
+  DoctorSurgery       DoctorSurgery[]
+  NurseSurgery        NurseSurgery[]
+  ProcedurePerSurgery ProcedurePerSurgery[]
+  Patient             Patient               @relation(fields: [patientId], references: [id])
 }
 
 model EmergencyContact {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   patientId   Int
   name        String
   lastName    String
-  email       String  @unique
+  email       String   @unique
   phoneNumber String
-  dni         String  @unique
-  patient     Patient @relation(fields: [patientId], references: [id])
+  dni         String   @unique
+  createAt    DateTime @default(now())
+  updateAt    DateTime @updatedAt
+  patient     Patient  @relation(fields: [patientId], references: [id])
 }
 
 model Procedure {
-  id          Int      @id @default(autoincrement())
-  surgeryId   String
-  name        String
-  description String
-  duration    DateTime
+  id                  Int                   @id @default(autoincrement())
+  name                String                @unique
+  description         String
+  durationHours       Int                   @default(0)
+  durationMinutes     Int                   @default(0)
+  createAt            DateTime              @default(now())
+  updateAt            DateTime              @updatedAt
+  deleteAt            DateTime?
+  ProcedurePerSurgery ProcedurePerSurgery[]
 }
 
 model DoctorStudies {
   doctorId    Int
   educationId Int
+  createAt    DateTime @default(now())
+  updateAt    DateTime @updatedAt
 
   doctor    Doctor    @relation(fields: [doctorId], references: [id])
   education Education @relation(fields: [educationId], references: [id])
 
   @@id([doctorId, educationId])
+}
+
+model NurseStudies {
+  nurseId     Int
+  educationId Int
+  createAt    DateTime @default(now())
+  updateAt    DateTime @updatedAt
+
+  nurse     Nurse     @relation(fields: [nurseId], references: [id])
+  education Education @relation(fields: [educationId], references: [id])
+
+  @@id([nurseId, educationId])
+}
+
+model DoctorSurgery {
+  doctorId  Int
+  surgeryId Int
+  createAt  DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  doctor  Doctor  @relation(fields: [doctorId], references: [id])
+  surgery Surgery @relation(fields: [surgeryId], references: [id])
+
+  @@id([surgeryId, doctorId])
+}
+
+model NurseSurgery {
+  nurseId   Int
+  surgeryId Int
+  createAt  DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  nurse   Nurse   @relation(fields: [nurseId], references: [id])
+  surgery Surgery @relation(fields: [surgeryId], references: [id])
+
+  @@id([surgeryId, nurseId])
+}
+
+model ProcedurePerSurgery {
+  surgeryId   Int
+  procedureId Int
+  done        Boolean  @default(false)
+  createAt    DateTime @default(now())
+  updateAt    DateTime @updatedAt
+
+  procedure Procedure @relation(fields: [procedureId], references: [id])
+  surgery   Surgery   @relation(fields: [surgeryId], references: [id])
+
+  @@id([surgeryId, procedureId])
 }
