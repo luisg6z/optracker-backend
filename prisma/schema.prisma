@@ -95,6 +95,7 @@ model Education {
 
 model Patient {
   id               Int                @id @default(autoincrement())
+  familyCode       String             @unique
   dni              String             @unique
   email            String             @unique
   birthDate        DateTime

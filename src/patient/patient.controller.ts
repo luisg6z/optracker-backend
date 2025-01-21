@@ -56,6 +56,19 @@ export class PatientController {
     }
   }
 
+  @Get('/code/:uuid')
+  @HttpCode(HttpStatus.OK)
+  async findOneByUUID(@Param('uuid') uuid: string) {
+    try {
+      return await this.patientService.findOneByUUID(uuid);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        throw new NotFoundException(error.message);
+      }
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
   @Get('/contact/:id')
   @HttpCode(HttpStatus.OK)
   async findOneWithEmergencyContact(@Param('id') id: string) {

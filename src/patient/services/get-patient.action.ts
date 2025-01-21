@@ -36,6 +36,7 @@ export class GetPatientAction {
       },
       select: {
         id: true,
+        familyCode: true,
         dni: true,
         name: true,
         lastName: true,
@@ -65,6 +66,7 @@ export class GetPatientAction {
         },
         select: {
           id: true,
+          familyCode: true,
           dni: true,
           email: true,
           name: true,
@@ -107,6 +109,65 @@ export class GetPatientAction {
         error?.code === 'P2025'
       ) {
         throw new NotFoundError(`A patient with the id ${id} doesn't exists`);
+      }
+      throw new UnexpectedError('a unexpected situation ocurred');
+    }
+  }
+
+  async findOneByUUID(uuid: string) {
+    try {
+      return await this.prisma.patient.findMany({
+        where: {
+          familyCode: {
+            contains: uuid,
+          },
+          deleteAt: null,
+        },
+        select: {
+          id: true,
+          familyCode: true,
+          dni: true,
+          email: true,
+          name: true,
+          lastName: true,
+          alergies: true,
+          phoneNumber: true,
+          birthDate: true,
+          weight: true,
+          height: true,
+          gender: true,
+          bloodType: true,
+          createAt: true,
+          updateAt: true,
+          deleteAt: true,
+          EmergencyContact: true,
+          Surgery: {
+            where: {
+              deleteAt: null,
+            },
+            select: {
+              date: true,
+              title: true,
+              DoctorSurgery: {
+                select: {
+                  doctor: true,
+                },
+              },
+              NurseSurgery: {
+                select: {
+                  nurse: true,
+                },
+              },
+            },
+          },
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error?.code === 'P2025'
+      ) {
+        throw new NotFoundError(`A patient with the id ${uuid} doesn't exists`);
       }
       throw new UnexpectedError('a unexpected situation ocurred');
     }
