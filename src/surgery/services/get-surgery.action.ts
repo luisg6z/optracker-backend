@@ -34,6 +34,7 @@ export class GetSurgeryAction {
         ProcedurePerSurgery: {
           select: {
             procedure: true,
+            done: true,
           },
         },
       },
