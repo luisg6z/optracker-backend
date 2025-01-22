@@ -161,6 +161,7 @@ export class GetPatientAction {
               ProcedurePerSurgery: {
                 select: {
                   procedure: true,
+                  done: true,
                 }
               }
             },
