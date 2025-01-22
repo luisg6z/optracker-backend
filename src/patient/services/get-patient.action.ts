@@ -158,6 +158,11 @@ export class GetPatientAction {
                   nurse: true,
                 },
               },
+              ProcedurePerSurgery: {
+                select: {
+                  procedure: true,
+                }
+              }
             },
           },
         },
