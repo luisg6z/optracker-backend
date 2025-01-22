@@ -51,7 +51,7 @@ export class UpdateSurgeryDto extends PartialType(CreateSurgeryDto) {
 export class UpdateStatusProcedureDTO {
   @ApiProperty()
   @IsNotEmpty()
-  @IsBoolean()
+  @IsNumber()
   surgeryId: number;
 
   @ApiProperty()

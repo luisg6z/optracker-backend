@@ -16,6 +16,7 @@ import {
   UpdateSurgeryDto,
 } from '../dto/update-surgery.dto';
 import { GetSurgeryAction } from './get-surgery.action';
+import { Status } from '@prisma/client';
 
 @Injectable()
 export class PutSurgeryAction {
@@ -133,7 +134,7 @@ export class PutSurgeryAction {
 
   async updateProcedureStatus(updateDto: UpdateStatusProcedureDTO) {
     try {
-      return await this.prisma.procedurePerSurgery.update({
+      const updatedProcedure = await this.prisma.procedurePerSurgery.update({
         where: {
           surgeryId_procedureId: {
             procedureId: updateDto.procedureId,
@@ -144,6 +145,47 @@ export class PutSurgeryAction {
           done: updateDto.done,
         },
       });
+
+      const proceduresFromSurgery = await this.prisma.surgery.findUnique({
+        where: {
+          id: updateDto.surgeryId,
+        },
+        select: {
+          ProcedurePerSurgery: {
+            select: {
+              procedureId: true,
+              done: true,
+            },
+          },
+        },
+      });
+
+
+      if(proceduresFromSurgery.ProcedurePerSurgery.some((procedure) => procedure.done)) {
+        await this.prisma.surgery.update({
+          where: {
+            id: updateDto.surgeryId,
+          },
+          data: {
+            status: Status.IN_PROGRESS
+          }
+        })
+      }
+
+      if(proceduresFromSurgery.ProcedurePerSurgery.every((procedure) => procedure.done)) {
+        await this.prisma.surgery.update({
+          where: {
+            id: updateDto.surgeryId,
+          },
+          data: {
+            status: Status.DONE
+          }
+        })
+      }
+
+      return updatedProcedure
+
+
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
