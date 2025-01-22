@@ -1,33 +1,61 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import * as bcrypt from 'bcrypt';
+import {
+  AlreadyExistsError,
+  NotFoundError,
+  UnexpectedError,
+} from 'src/common/errors/service.errors';
+import { EducationService } from 'src/education/education.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateNurseDto } from './dto/create-nurse.dto';
 import { UpdateNurseDto } from './dto/update-nurse.dto';
-import * as bcrypt from 'bcrypt';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { AlreadyExistsError, NotFoundError, UnexpectedError } from 'src/common/errors/service.errors';
 
 @Injectable()
 export class NurseService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly educationService: EducationService,
+  ) {}
+
   async create(createNurseDto: CreateNurseDto) {
     try {
-      const hashedPassword = bcrypt.hash(
+      const hashedPassword = await bcrypt.hash(
         createNurseDto.password,
-        Number(process.env.SALT_ROUNDS)
-      )
+        Number(process.env.SALT_ROUNDS),
+      );
+
+      const { educationIds, ...nurseData } = createNurseDto;
+
+      const nurseStudies = [];
+      for (const value of educationIds) {
+        const education = await this.educationService.findOneByName(value);
+        if (!education) {
+          throw new NotFoundError('Education does not exists!');
+        }
+        nurseStudies.push({
+          educationId: education.id,
+        });
+      }
+
       return await this.prisma.nurse.create({
         data: {
+          ...nurseData,
           password: hashedPassword,
-          ...createNurseDto,
-        }
+          NurseStudies: {
+            create: nurseStudies,
+          },
+        },
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === "P2002") {
-          throw new AlreadyExistsError(`A Nurse with the email ${createNurseDto.email} already exists`);
+        if (error.code === 'P2002') {
+          throw new AlreadyExistsError(
+            `A Nurse with the email ${createNurseDto.email} already exists`,
+          );
         }
       }
-      throw new UnexpectedError("An unexpected error ocurred")
+      throw new UnexpectedError(error.message);
     }
   }
 
@@ -41,15 +69,21 @@ export class NurseService {
         speciality: true,
         licenseNumber: true,
         dea: true,
-      }
-    })
+        dni: true,
+        NurseStudies: {
+          select: {
+            education: true,
+          },
+        },
+      },
+    });
   }
 
-  async findOne(id: number) {
+  async findOnebyId(id: number) {
     try {
       return await this.prisma.nurse.findUniqueOrThrow({
         where: {
-          id: id
+          id: id,
         },
         select: {
           id: true,
@@ -59,36 +93,57 @@ export class NurseService {
           speciality: true,
           licenseNumber: true,
           dea: true,
-        }
-      })
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
-          throw new NotFoundError(`A nurse with the id ${id} doesn't exists`);
-        }
-      }
-      throw new UnexpectedError("a unexpected situation ocurred")
-    };
-  }
-
-  async update(id: number, updateNurseDto: UpdateNurseDto) {
-    try {
-      return await this.prisma.nurse.update({
-        where: {
-          id: id
+          dni: true,
+          NurseStudies: {
+            select: {
+              education: true,
+            },
+          },
         },
-        data: updateNurseDto
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundError(`A nurse with the id ${id} doesn't exists`);
         }
-        if(error.code === "P2002") {
-          throw new AlreadyExistsError(`A nurse with the email ${updateNurseDto.email} already exists`);
+      }
+      throw new UnexpectedError('a unexpected situation ocurred');
+    }
+  }
+
+  async findOneByEmail(email: string) {
+    return await this.prisma.nurse.findUnique({
+      where: {
+        email: email,
+      },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+      },
+    });
+  }
+
+  async update(id: number, updateNurseDto: UpdateNurseDto) {
+    try {
+      return await this.prisma.nurse.update({
+        where: {
+          id: id,
+        },
+        data: updateNurseDto,
+      });
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new NotFoundError(`A nurse with the id ${id} doesn't exists`);
+        }
+        if (error.code === 'P2002') {
+          throw new AlreadyExistsError(
+            `A nurse with the email ${updateNurseDto.email} already exists`,
+          );
         }
       }
-      throw new UnexpectedError("a unexpected situation ocurred")
+      throw new UnexpectedError('a unexpected situation ocurred');
     }
   }
 
@@ -96,16 +151,16 @@ export class NurseService {
     try {
       return await this.prisma.nurse.delete({
         where: {
-          id: id
-        }
-      })
+          id: id,
+        },
+      });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
           throw new NotFoundError(`A nurse with the id ${id} doesn't exists`);
         }
       }
-      throw new UnexpectedError("an unexpected situation ocurred")
+      throw new UnexpectedError('an unexpected situation ocurred');
     }
   }
 }

@@ -1,0 +1,176 @@
+import { Injectable } from '@nestjs/common';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import {
+  AlreadyExistsError,
+  NotFoundError,
+  UnexpectedError,
+} from 'src/common/errors/service.errors';
+import { EducationService } from 'src/education/education.service';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateDoctorDto } from './dto/create-doctor.dto';
+import { UpdateDoctorDto } from './dto/update-doctor.dto';
+
+@Injectable()
+export class DoctorService {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly educationService: EducationService,
+  ) {}
+
+  async create(createDoctorDto: CreateDoctorDto) {
+    try {
+      const doctorExists = await this.findOneByDNI(createDoctorDto.dni);
+
+      if (doctorExists.length !== 0) {
+        throw new AlreadyExistsError(
+          `A Doctor with the dni ${createDoctorDto.dni} already exists`,
+        );
+      }
+
+      const { educationIds, ...doctorData } = createDoctorDto;
+
+      const doctorStudies = [];
+      for (const value of educationIds) {
+        const education = await this.educationService.findOneByName(value);
+        if (!education) {
+          throw new NotFoundError('Education does not exists!');
+        }
+        doctorStudies.push({
+          educationId: education.id,
+        });
+      }
+
+      return await this.prisma.doctor.create({
+        data: {
+          DoctorStudies: {
+            create: doctorStudies,
+          },
+          ...doctorData,
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error?.code === 'P2002'
+      ) {
+        throw new AlreadyExistsError(
+          `A Doctor with the dni ${createDoctorDto.dni} already exists`,
+        );
+      }
+      if (error instanceof AlreadyExistsError) {
+        throw new AlreadyExistsError(error.message);
+      }
+      console.log(error.message);
+      throw new UnexpectedError('An unexpected error ocurred');
+    }
+  }
+
+  async findAll() {
+    return await this.prisma.doctor.findMany({
+      select: {
+        id: true,
+        dni: true,
+        dea: true,
+        names: true,
+        lastNames: true,
+        speciality: true,
+        licenseNumber: true,
+        DoctorStudies: {
+          select: {
+            education: true,
+          },
+        },
+      },
+    });
+  }
+
+  async findOne(id: number) {
+    try {
+      return await this.prisma.doctor.findUniqueOrThrow({
+        where: {
+          id: id,
+        },
+        select: {
+          id: true,
+          dni: true,
+          dea: true,
+          names: true,
+          lastNames: true,
+          speciality: true,
+          licenseNumber: true,
+          DoctorStudies: {
+            select: {
+              education: true,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error?.code === 'P2025'
+      ) {
+        throw new NotFoundError(`A doctor with the id ${id} doesn't exists`);
+      }
+      throw new UnexpectedError('a unexpected situation ocurred');
+    }
+  }
+
+  async findOneByDNI(dni: string) {
+    return await this.prisma.doctor.findMany({
+      where: {
+        dni: dni,
+      },
+      select: {
+        id: true,
+        dni: true,
+        dea: true,
+        names: true,
+        lastNames: true,
+        speciality: true,
+        licenseNumber: true,
+      },
+    });
+  }
+
+  async update(id: number, updateDoctorDto: UpdateDoctorDto) {
+    try {
+      return await this.prisma.doctor.update({
+        where: {
+          id: id,
+        },
+        data: updateDoctorDto,
+      });
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new NotFoundError(`A doctor with the id ${id} doesn't exists`);
+        }
+        if (error.code === 'P2002') {
+          throw new AlreadyExistsError(
+            `A doctor with the dni ${updateDoctorDto.dni} already exists`,
+          );
+        }
+      }
+      throw new UnexpectedError('a unexpected situation ocurred');
+    }
+  }
+
+  async remove(id: number) {
+    try {
+      return await this.prisma.doctor.delete({
+        where: {
+          id: id,
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error?.code === 'P2025'
+      ) {
+        throw new NotFoundError(`A doctor with the id ${id} doesn't exists`);
+      }
+      throw new UnexpectedError('An unexpected situation ocurred');
+    }
+  }
+}

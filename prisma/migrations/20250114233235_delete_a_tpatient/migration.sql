@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Patient" ALTER COLUMN "alergies" SET NOT NULL,
+ALTER COLUMN "alergies" SET DATA TYPE TEXT;
