@@ -117,20 +117,22 @@ export class DoctorService {
   }
 
   async findOneByDNI(dni: string) {
-    return await this.prisma.doctor.findMany({
-      where: {
-        dni: dni,
-      },
-      select: {
-        id: true,
-        dni: true,
-        dea: true,
-        names: true,
-        lastNames: true,
-        speciality: true,
-        licenseNumber: true,
-      },
-    });
+    try {
+      return await this.prisma.doctor.findMany({
+        where: {
+          dni: dni,
+        },
+        select: {
+          id: true,
+          dni: true,
+          dea: true,
+          names: true,
+          lastNames: true,
+          speciality: true,
+          licenseNumber: true,
+        },
+      });
+    } catch (error) { }
   }
 
   async update(id: number, updateDoctorDto: UpdateDoctorDto) {
@@ -173,4 +175,53 @@ export class DoctorService {
       throw new UnexpectedError('An unexpected situation ocurred');
     }
   }
+
+  async seed() {
+    const doctors = [
+      {
+        dni: '12345678',
+        dea: '246810',
+        names: 'Juan',
+        lastNames: 'Perez',
+        speciality: 'Cirujano General',
+        licenseNumber: '4785126',
+        educationIds: ['Universidad de Carabobo'],
+      },
+      {
+        dni: '87654321',
+        dea: '135790',
+        names: 'Maria',
+        lastNames: 'Rodriguez',
+        speciality: 'Cirujano Plastico',
+        licenseNumber: '1234567',
+        educationIds: ['Universidad de Oriente'],
+      },
+      {
+        dni: '45678912',
+        dea: '246810',
+        names: 'Pedro',
+        lastNames: 'Fernandez',
+        speciality: 'Neurocirujano',
+        licenseNumber: '4785126',
+        educationIds: ['Universidad Central De Venezuela'],
+      },
+      {
+        dni: '98765432',
+        dea: '135790',
+        names: 'Jose',
+        lastNames: 'Gonzalez',
+        speciality: 'Cardiologo',
+        licenseNumber: '1234567',
+        educationIds: ['Universidad de Carabobo'],
+      }
+    ];
+
+    for (const value of doctors) {
+      await this.create(value);
+    }
+
+    return 'Doctors seeded';
+
+  }
+
 }

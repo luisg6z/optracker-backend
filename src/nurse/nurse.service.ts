@@ -163,4 +163,64 @@ export class NurseService {
       throw new UnexpectedError('an unexpected situation ocurred');
     }
   }
+
+  async seed() {
+    const nurseData = [
+      {
+        name: 'Juan',
+        lastName: 'Perez',
+        email: 'JuanP123@gmail.com',
+        password: '123456',
+        speciality: 'Recuperacion',
+        licenseNumber: '423462',
+        dea: '238746',
+        dni: '444785',
+        educationIds: ['Universidad de Oriente'],
+      },
+      {
+        name: 'Maria',
+        lastName: 'Gonzalez',
+        email: 'mgonzalez18@gmail.com',
+        password: '478513',
+        speciality: 'Anestesista',
+        licenseNumber: '478416',
+        dea: '885136',
+        dni: '021595',
+        educationIds: ['Universidad de Oriente'],
+      },
+      {
+        name: 'Pedro',
+        lastName: 'Gomez',
+        email: 'PedroGomez@gmail.com',
+        password: '774116',
+        speciality: 'Instrumentista',
+        licenseNumber: '845631',
+        dea: '789456',
+        dni: '123654',
+        educationIds: ['Universidad de Oriente'],
+      },
+      {
+        name: 'Jose',
+        lastName: 'Martinez',
+        email: 'JM1986@gmail.com',
+        password: '454568',
+        speciality: 'Cuidados Intensivos',
+        licenseNumber: '7416995',
+        dea: '324886',
+        dni: '541263',
+        educationIds: ['Universidad de Oriente'],
+      },
+      {
+        name: 'Ana',
+        lastName: 'Rodriguez',
+        email: 'AnRo@gmail.com',
+        password: '486541',
+        speciality: 'Quirofano',
+        licenseNumber: '545842',
+        dea: '221188',
+        dni: '852465',
+        educationIds: ['Universidad de Oriente'],
+      }
+    ];
+  }
 }
