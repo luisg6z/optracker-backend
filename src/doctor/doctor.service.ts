@@ -216,8 +216,19 @@ export class DoctorService {
       },
     ];
 
-    for (const value of doctors) {
-      await this.create(value);
+    // const doctorStudies = [];
+    // for (const value of educationIds) {
+    //   const education = await this.educationService.findOneByName(value);
+    //   if (!education) {
+    //     throw new NotFoundError('Education does not exists!');
+    //   }
+    //   doctorStudies.push({
+    //     educationId: education.id,
+    //   });
+    // }
+
+    for (const doctor of doctors) {
+      await this.create(doctor);
     }
   }
 }

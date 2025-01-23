@@ -19,6 +19,7 @@ export class SeederService {
       console.log('Education already exists in the database');
       return;
     }
+    await this.educationSeed.seed();
     if ((await this.prisma.administrator.count()) != 0) {
       console.log('Admin already exists in the database');
     }
@@ -30,7 +31,6 @@ export class SeederService {
     }
 
     await Promise.all([
-      this.educationSeed.seed(),
       this.adminSeed.seed(),
       this.doctorSeed.seed(),
       this.nurseSeed.seed(),
