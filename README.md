@@ -1,73 +1,63 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# Op Tracker
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+OpTracker es una aplicación destinada a la trazabilidad de las operaciones quirúrgicas, con el fin de reducir la incertidumbre del proceso para los familiares y para llevar el control de una operación de parte de un enfermero
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
+
+## Instalación
+
+### Instalar OpTracker con npm
+
+Para la instalación, la CLI de Nestjs es recomendada para el uso del proyecto, use el siguiente comando en bash:
+
 
 ```bash
-$ npm install
+  npm i -g @nestjs/cli
 ```
 
-## Running the app
+> **Nota:**
+> para más información, consulte la documentación de Nestjs, disponible en: https://docs.nestjs.com
+
+Luego, se debe clonar el repositorio e instalar las dependencias:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+  git clone https://github.com/luisg6z/optracker-backend
+  cd optracker-backend
+  npm i
 ```
+## Variables de entorno
 
-## Test
+Para correr el proyecto es necesario tener las variables de entorno necesarias, en el directorio raíz se encuentra una plantilla de archivo `.env`
+
+
+## Usando el proyecto
+
+Una vez configuradas las variables de entorno, se debe inicializar la base de datos, para ello, se debe ejecutar el siguiente script:
 
 ```bash
-# unit tests
-$ npm run test
+  npx prisma migrate dev
+```
+> **Nota:**
+> para más información, consulte la documentación de prisma, disponible en: https://www.prisma.io/docs
 
-# e2e tests
-$ npm run test:e2e
+Para correr la aplicación en modo de desarrollo, se debe utilizar el siguiente script:
 
-# test coverage
-$ npm run test:cov
+```bash
+  npm run start:dev
 ```
 
-## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Documentación de la API
 
-## Stay in touch
+Por defecto, la aplicación estará en el `localhost:3000`, la aplicación posee una documentación de cada endpoint en la ruta `/docs`
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
+## Autores
 
-Nest is [MIT licensed](LICENSE).
+- [@luisg6z](https://github.com/luisg6z)
+- [@jaraycode](https://github.com/jaraycode)
+- [@Sarce18](https://github.com/Sarce18)
+
+
