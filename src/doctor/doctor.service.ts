@@ -117,20 +117,22 @@ export class DoctorService {
   }
 
   async findOneByDNI(dni: string) {
-    return await this.prisma.doctor.findMany({
-      where: {
-        dni: dni,
-      },
-      select: {
-        id: true,
-        dni: true,
-        dea: true,
-        names: true,
-        lastNames: true,
-        speciality: true,
-        licenseNumber: true,
-      },
-    });
+    try {
+      return await this.prisma.doctor.findMany({
+        where: {
+          dni: dni,
+        },
+        select: {
+          id: true,
+          dni: true,
+          dea: true,
+          names: true,
+          lastNames: true,
+          speciality: true,
+          licenseNumber: true,
+        },
+      });
+    } catch (error) {}
   }
 
   async update(id: number, updateDoctorDto: UpdateDoctorDto) {
@@ -171,6 +173,62 @@ export class DoctorService {
         throw new NotFoundError(`A doctor with the id ${id} doesn't exists`);
       }
       throw new UnexpectedError('An unexpected situation ocurred');
+    }
+  }
+
+  async seed() {
+    const doctors = [
+      {
+        dni: '12345678',
+        dea: '246810',
+        names: 'Juan',
+        lastNames: 'Perez',
+        speciality: 'Cirujano General',
+        licenseNumber: '4785126',
+        educationIds: ['Cirujanos maxilofaciales', 'Cirujanos oncólogos'],
+      },
+      {
+        dni: '87654321',
+        dea: '135790',
+        names: 'Maria',
+        lastNames: 'Rodriguez',
+        speciality: 'Cirujano Plastico',
+        licenseNumber: '1234567',
+        educationIds: ['Cirujanos pediátricos'],
+      },
+      {
+        dni: '45678912',
+        dea: '246810',
+        names: 'Pedro',
+        lastNames: 'Fernandez',
+        speciality: 'Neurocirujano',
+        licenseNumber: '4785126',
+        educationIds: ['Cirujanos plásticos'],
+      },
+      {
+        dni: '98765432',
+        dea: '135790',
+        names: 'Jose',
+        lastNames: 'Gonzalez',
+        speciality: 'Cardiologo',
+        licenseNumber: '1234567',
+        educationIds: ['Neurocirujanos'],
+      },
+    ];
+
+    // const doctorStudies = [];
+    // for (const value of educationIds) {
+    //   const education = await this.educationService.findOneByName(value);
+    //   if (!education) {
+    //     throw new NotFoundError('Education does not exists!');
+    //   }
+    //   doctorStudies.push({
+    //     educationId: education.id,
+    //   });
+    // }
+
+    for (const doctor of doctors) {
+      await this.create(doctor);
     }
   }
 }

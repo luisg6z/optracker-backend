@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { AdminService } from 'src/admin/admin.service';
+import { DoctorService } from 'src/doctor/doctor.service';
 import { EducationService } from 'src/education/education.service';
+import { NurseService } from 'src/nurse/nurse.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -9,17 +11,29 @@ export class SeederService {
     private readonly educationSeed: EducationService,
     private readonly prisma: PrismaService,
     private readonly adminSeed: AdminService,
+    private readonly doctorSeed: DoctorService,
+    private readonly nurseSeed: NurseService,
   ) {}
   async seedAll() {
     if ((await this.prisma.education.count()) != 0) {
       console.log('Education already exists in the database');
       return;
     }
+    await this.educationSeed.seed();
     if ((await this.prisma.administrator.count()) != 0) {
       console.log('Admin already exists in the database');
     }
+    if ((await this.prisma.nurse.count()) != 0) {
+      console.log('Admin already exists in the database');
+    }
+    if ((await this.prisma.doctor.count()) != 0) {
+      console.log('Admin already exists in the database');
+    }
 
-    await this.educationSeed.seed();
-    await this.adminSeed.seed();
+    await Promise.all([
+      this.adminSeed.seed(),
+      this.doctorSeed.seed(),
+      this.nurseSeed.seed(),
+    ]);
   }
 }
