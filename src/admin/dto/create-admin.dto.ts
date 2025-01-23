@@ -3,23 +3,23 @@ import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 
 export class CreateAdminDto {
 
-    @ApiProperty()
+    @ApiProperty({type: String, description: 'Apellido del administrador'})
     @IsString()
     @IsNotEmpty()
     name : string
 
-    @ApiProperty()
+    @ApiProperty({ type: String, description: 'Apellido del administrador' })
     @IsString()
     @IsNotEmpty()
     lastName : string
 
-    @ApiProperty()
+    @ApiProperty({type: String, description: "Correo electrónico del administrador"})
     @IsString()
     @IsNotEmpty()
     @IsEmail()
     email :string
 
-    @ApiProperty()
+    @ApiProperty({type: String, description: "contraseña del administrador"})
     @IsString()
     @IsNotEmpty()
     password : string

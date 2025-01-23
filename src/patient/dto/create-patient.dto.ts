@@ -11,60 +11,60 @@ import {
 } from 'class-validator';
 
 export class CreatePatientDto {
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Documento de identidad del paciente que se está registrando' })
   @IsNotEmpty()
   @IsString()
   dni: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Correo electrónico del paciente' })
   @IsNotEmpty()
   @IsString()
   @IsEmail()
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Nombre del paciente' })
   @IsNotEmpty()
   @IsString()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Apellido del paciente' })
   @IsNotEmpty()
   @IsString()
   lastName: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Descripción de las alergias que posee el paciente' })
   @IsNotEmpty()
   @IsString()
   alergies: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Número de teléfono del paciente' })
   @IsNotEmpty()
   @IsString()
   phoneNumber: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: Date, description: 'Fecha de nacimiento del paciente que será usado para el cálculo de su edad' })
   @IsNotEmpty()
   @IsDateString()
   birthDate: Date;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number, description: 'Peso del paciente' })
   @IsNotEmpty()
   @IsNumber()
   @IsPositive()
   weight: number;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number, description: 'Altura del paciente' })
   @IsNotEmpty()
   @IsNumber()
   @IsPositive()
   height: number;
 
-  @ApiProperty()
+  @ApiProperty({ enum: Gender, description: 'Género del paciente', enumName: 'Género' })
   @IsNotEmpty()
   @IsEnum(Gender)
   gender: Gender;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'Tipo de sangre del paciente', enum: BloodType, enumName: 'Tipo de sangre' })
   @IsNotEmpty()
   @IsEnum(BloodType)
   bloodType: BloodType;

@@ -5,33 +5,33 @@ import { CreateEmergencyContactDto } from './create-emergency-contact.dto';
 export class UpdateEmergencyContactDto extends PartialType(
   CreateEmergencyContactDto,
 ) {
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Nombre del contacto de emergencia'})
   @IsOptional()
   @IsString()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Apellido del contacto de emergencia'})
   @IsOptional()
   @IsString()
   lastName: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Correo electrónico del contacto de emergencia'})
   @IsOptional()
   @IsString()
   @IsEmail()
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Documento de identidad del contacto de emergencia'})
   @IsOptional()
   @IsString()
   dni: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Número de teléfono del contacto de emergencia'})
   @IsOptional()
   @IsString()
   phoneNumber: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number, description: 'Clave foránea del paciente que se esté registrando para esta cirugía'})
   @IsOptional()
   @IsNumber()
   patientId: number;
