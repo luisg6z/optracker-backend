@@ -4,6 +4,7 @@ import { DoctorService } from 'src/doctor/doctor.service';
 import { EducationService } from 'src/education/education.service';
 import { NurseService } from 'src/nurse/nurse.service';
 import { PrismaModule } from 'src/prisma/prisma.module';
+import { ProcedureService } from 'src/procedure/services/procedure.service';
 import { SeederController } from './seeder.controller';
 import { SeederService } from './seeder.service';
 
@@ -15,6 +16,7 @@ import { SeederService } from './seeder.service';
     AdminService,
     DoctorService,
     NurseService,
+    ProcedureService,
   ],
   imports: [PrismaModule],
 })
