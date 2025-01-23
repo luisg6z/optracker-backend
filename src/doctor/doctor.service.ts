@@ -132,7 +132,7 @@ export class DoctorService {
           licenseNumber: true,
         },
       });
-    } catch (error) { }
+    } catch (error) {}
   }
 
   async update(id: number, updateDoctorDto: UpdateDoctorDto) {
@@ -185,7 +185,7 @@ export class DoctorService {
         lastNames: 'Perez',
         speciality: 'Cirujano General',
         licenseNumber: '4785126',
-        educationIds: ['Universidad de Carabobo'],
+        educationIds: ['Cirujanos maxilofaciales', 'Cirujanos oncólogos'],
       },
       {
         dni: '87654321',
@@ -194,7 +194,7 @@ export class DoctorService {
         lastNames: 'Rodriguez',
         speciality: 'Cirujano Plastico',
         licenseNumber: '1234567',
-        educationIds: ['Universidad de Oriente'],
+        educationIds: ['Cirujanos pediátricos'],
       },
       {
         dni: '45678912',
@@ -203,7 +203,7 @@ export class DoctorService {
         lastNames: 'Fernandez',
         speciality: 'Neurocirujano',
         licenseNumber: '4785126',
-        educationIds: ['Universidad Central De Venezuela'],
+        educationIds: ['Cirujanos plásticos'],
       },
       {
         dni: '98765432',
@@ -212,16 +212,12 @@ export class DoctorService {
         lastNames: 'Gonzalez',
         speciality: 'Cardiologo',
         licenseNumber: '1234567',
-        educationIds: ['Universidad de Carabobo'],
-      }
+        educationIds: ['Neurocirujanos'],
+      },
     ];
 
     for (const value of doctors) {
       await this.create(value);
     }
-
-    return 'Doctors seeded';
-
   }
-
 }
