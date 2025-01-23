@@ -9,37 +9,37 @@ import {
 } from 'class-validator';
 
 export class CreateSurgeryDto {
-  @ApiProperty()
+  @ApiProperty({type: String, description: "Título de la cirugía"})
   @IsNotEmpty()
   @IsString()
   title: string;
 
-  @ApiProperty()
+  @ApiProperty({type: Date, description: "Fecha de la cirugía"})
   @IsNotEmpty()
   @IsDateString()
   date: Date;
 
-  @ApiProperty()
+  @ApiProperty({enum: Status, enumName: "Status-enum", description: 'Progreso de la cirugía'})
   @IsNotEmpty()
   @IsEnum(Status)
   status: Status;
 
-  @ApiProperty()
+  @ApiProperty({type: Number, description: "Id of the patient"})
   @IsNotEmpty()
   @IsNumber()
   patientId: number;
 
-  @ApiProperty()
+  @ApiProperty({type: Number, description: "Ids de las enfermeras", isArray: true})
   @IsNotEmpty()
   @IsNumber({}, { each: true })
   nurseIds: number[];
 
-  @ApiProperty()
+  @ApiProperty({type: Number, description: "Ids de los doctores", isArray: true})
   @IsNotEmpty()
   @IsNumber({}, { each: true })
   doctorIds: number[];
 
-  @ApiProperty()
+  @ApiProperty({type: Number, description: "Ids de los procedimientos", isArray: true})
   @IsNotEmpty()
   @IsNumber({}, { each: true })
   procedureIds: number[];

@@ -11,58 +11,58 @@ import {
 import { CreatePatientDto } from './create-patient.dto';
 
 export class UpdatePatientDto extends PartialType(CreatePatientDto) {
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Documento de identidad del paciente que se está registrando' })
   @IsOptional()
   @IsString()
   dni: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Correo electrónico del paciente' })
   @IsOptional()
   @IsString()
   @IsEmail()
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Nombre del paciente' })
   @IsOptional()
   @IsString()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Apellido del paciente' })
   @IsOptional()
   @IsString()
   lastName: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Descripción de las alergias que posee el paciente' })
   @IsOptional()
   @IsString()
   alergies: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Número de teléfono del paciente' })
   @IsOptional()
   @IsString()
   phoneNumber: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: Date, description: 'Fecha de nacimiento del paciente que será usado para el cálculo de su edad' })
   @IsOptional()
   @IsDateString()
   birthDate: Date;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number, description: 'Peso del paciente' })
   @IsOptional()
   @IsNumber()
   weight: number;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number, description: 'Altura del paciente' })
   @IsOptional()
   @IsNumber()
   height: number;
 
-  @ApiProperty()
+  @ApiProperty({ enum: Gender, description: 'Género del paciente', enumName: 'Género' })
   @IsOptional()
   @IsEnum(Gender)
   gender: Gender;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'Tipo de sangre del paciente', enum: BloodType, enumName: 'Tipo de sangre' })
   @IsOptional()
   @IsEnum(BloodType)
   bloodType: BloodType;
