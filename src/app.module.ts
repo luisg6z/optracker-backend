@@ -1,18 +1,17 @@
+import { AdminModule } from '@/admin/admin.module';
+import { AppService } from '@/app.service';
+import { AuthModule } from '@/auth/auth.module';
+import { EmergencyContactModule } from '@/client/emergency-contact/emergency-contact.module';
+import { PatientModule } from '@/client/patient/patient.module';
+import { ConfigModule } from '@/common/config/config.module';
+import { ProcedureModule } from '@/medProcedure/procedure/procedure.module';
+import { SurgeryModule } from '@/medProcedure/surgery/surgery.module';
+import { DoctorModule } from '@/medTeam/doctor/doctor.module';
+import { EducationModule } from '@/medTeam/education/education.module';
+import { NurseModule } from '@/medTeam/nurse/nurse.module';
+import { PrismaModule } from '@/prisma/prisma.module';
 import { Module } from '@nestjs/common';
-import { AdminModule } from './admin/admin.module';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { ConfigModule } from './common/config/config.module';
-import { DoctorModule } from './doctor/doctor.module';
-import { EducationModule } from './education/education.module';
-import { NurseModule } from './nurse/nurse.module';
-import { PatientModule } from './patient/patient.module';
-import { PrismaModule } from './prisma/prisma.module';
-import { EmergencyContactModule } from './emergency-contact/emergency-contact.module';
-import { SurgeryModule } from './surgery/surgery.module';
-import { ProcedureModule } from './procedure/procedure.module';
-import { SeederModule } from './seeder/seeder.module';
 
 @Module({
   imports: [
@@ -27,7 +26,6 @@ import { SeederModule } from './seeder/seeder.module';
     EmergencyContactModule,
     SurgeryModule,
     ProcedureModule,
-    SeederModule,
   ],
   controllers: [AppController],
   providers: [AppService],
