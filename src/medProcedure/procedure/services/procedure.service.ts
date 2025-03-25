@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import {
   NotFoundError,
   UnexpectedError,
@@ -11,6 +11,8 @@ import { PutProcedureAction } from './put-procedure.action';
 
 @Injectable()
 export class ProcedureService implements OnModuleInit {
+  private readonly logger = new Logger(ProcedureService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly getProcedureAction: GetProcedureAction,
@@ -132,7 +134,7 @@ export class ProcedureService implements OnModuleInit {
 
   async onModuleInit() {
     if ((await this.prisma.procedure.count()) != 0) {
-      console.log('Procedure already exists in the database');
+      this.logger.log('Procedure already exists in the database');
       return;
     }
     await this.seed();

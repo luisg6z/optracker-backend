@@ -1,5 +1,5 @@
 import { EducationService } from '@/medTeam/education/education.service';
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import * as bcrypt from 'bcrypt';
 import {
@@ -13,6 +13,8 @@ import { UpdateNurseDto } from './dto/update-nurse.dto';
 
 @Injectable()
 export class NurseService implements OnModuleInit {
+  private readonly logger = new Logger(NurseService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly educationService: EducationService,
@@ -230,7 +232,7 @@ export class NurseService implements OnModuleInit {
 
   async onModuleInit() {
     if ((await this.prisma.nurse.count()) != 0) {
-      console.log('Nurse already exists in the database');
+      this.logger.log('Nurse already exists in the database');
       return;
     }
     await this.seed();
