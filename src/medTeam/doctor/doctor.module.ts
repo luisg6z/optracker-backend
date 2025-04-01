@@ -1,5 +1,6 @@
 import { EducationService } from '@/medTeam/education/education.service';
-import { Module } from '@nestjs/common';
+import { PrismaService } from '@/prisma/prisma.service';
+import { Logger, Module, OnModuleInit } from '@nestjs/common';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { DoctorController } from './doctor.controller';
 import { DoctorService } from './doctor.service';
@@ -10,4 +11,19 @@ import { DoctorService } from './doctor.service';
   imports: [PrismaModule],
   exports: [DoctorModule],
 })
-export class DoctorModule {}
+export class DoctorModule implements OnModuleInit {
+  private readonly logger = new Logger(DoctorService.name);
+
+  constructor(
+    private readonly doctorService: DoctorService,
+    private readonly prisma: PrismaService,
+  ) {}
+
+  async onModuleInit() {
+    if ((await this.prisma.doctor.count()) != 0) {
+      this.logger.log('Doctor already exists in the database');
+      return;
+    }
+    await this.doctorService.seed();
+  }
+}
