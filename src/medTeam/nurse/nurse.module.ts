@@ -16,8 +16,15 @@ export class NurseModule implements OnModuleInit {
   constructor(
     private readonly nurseService: NurseService,
     private readonly prisma: PrismaService,
+    private readonly educationService: EducationService,
   ) {}
   async onModuleInit() {
+    if ((await this.prisma.education.count()) != 0) {
+      this.logger.log('Education already exists in the database');
+      return;
+    }
+    await this.educationService.seed();
+
     if ((await this.prisma.nurse.count()) != 0) {
       this.logger.log('Nurse already exists in the database');
       return;

@@ -173,14 +173,12 @@ export class EducationService {
       'Enfermeros de triage',
       'Evalúan a los pacientes y priorizan su atención según la urgencia',
     ];
-    const education = [];
 
-    grades.forEach((value) => {
-      education.push({
+    grades.forEach(async (value) => {
+      let education = {
         institutionName: value,
-      });
+      };
+      await this.create(education);
     });
-
-    await this.prisma.education.createMany({ data: education });
   }
 }

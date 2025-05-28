@@ -2,12 +2,10 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-// import { SeederService } from './seeder/seeder.service';
 
 async function bootstrap() {
   console.log(`%cApp running on port: ${process.env.API_PORT}`, 'color:green;');
   const app = await NestFactory.create(AppModule);
-  // const seeder = app.get(SeederService);
 
   app.enableCors();
 
@@ -32,7 +30,6 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
 
-  // await seeder.seedAll();
   await app.listen(process.env.API_PORT || 3000);
 }
 bootstrap();
